@@ -28,8 +28,8 @@ public class MyDocument {
         return template;
     }
 
-    public void setTemplate() throws IOException {
-        this.template = new XWPFDocument(new FileInputStream("src/main/resources/docx/template.docx"));
+    public void setTemplate(String path) throws IOException {
+        this.template = new XWPFDocument(new FileInputStream(path));
     }
 
     public XWPFDocument getOutput() {
