@@ -1,4 +1,4 @@
-package ru.samcold.controllers.domain;
+package ru.samcold.domain;
 
 public class Customer {
     private String name;
@@ -6,7 +6,12 @@ public class Customer {
     private String region;
     private String city;
     private String address;
+    private String boss;
+    private String post;
     private String phone;
+
+    public Customer() {
+    }
 
     public Customer(String name, String zip, String region, String city, String address, String phone) {
         this.name = name;
@@ -55,6 +60,22 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getBoss() {
+        return boss;
+    }
+
+    public void setBoss(String boss) {
+        this.boss = boss;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 
     public String getPhone() {

@@ -1,7 +1,8 @@
-package ru.samcold.controllers.domain;
+package ru.samcold.domain;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Objects;
@@ -28,8 +29,7 @@ public class MyDocument {
     }
 
     public void setTemplate() throws IOException {
-        this.template = new XWPFDocument(Objects.requireNonNull(
-                getClass().getResourceAsStream("/docx/template.docx")));
+        this.template = new XWPFDocument(new FileInputStream("src/main/resources/docx/template.docx"));
     }
 
     public XWPFDocument getOutput() {
@@ -37,7 +37,7 @@ public class MyDocument {
     }
 
     private void setOutput() throws IOException {
-        this.output = new XWPFDocument(MyDocument.class.getResourceAsStream("output.docx"));
+        //this.output = new XWPFDocument(MyDocument.class.getResourceAsStream("output.docx"));
     }
 
     public void save() throws IOException {
@@ -50,6 +50,5 @@ public class MyDocument {
         FileOutputStream fos = new FileOutputStream("template2.docx");
         template.write(fos);
     }
-
 
 }
