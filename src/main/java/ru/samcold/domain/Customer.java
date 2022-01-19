@@ -1,5 +1,7 @@
 package ru.samcold.domain;
 
+import ru.samcold.domain.proxy.CustomerProxy;
+
 public class Customer {
     private String name;
     private String zip;
@@ -20,6 +22,17 @@ public class Customer {
         this.city = city;
         this.address = address;
         this.phone = phone;
+    }
+
+    public Customer(CustomerProxy proxy) {
+        name = proxy.nameProperty().get();
+        zip = proxy.zipProperty().get();
+        region = proxy.regionProperty().get();
+        city = proxy.cityProperty().get();
+        address = proxy.addressProperty().get();
+        boss = proxy.bossProperty().get();
+        post = proxy.postProperty().get();
+        phone = proxy.phoneProperty().get();
     }
 
     public String getName() {
