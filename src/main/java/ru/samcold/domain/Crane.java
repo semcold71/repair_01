@@ -15,6 +15,19 @@ public class Crane {
     public Crane() {
     }
 
+    public Crane(CraneProxy proxy) {
+        name = proxy.nameProperty().get();
+        mark = proxy.markProperty().get();
+        mode = proxy.modeProperty().get();
+        zav = proxy.zavProperty().get();
+        reg = proxy.regProperty().get();
+        factory = proxy.factoryProperty().get();
+        issue = proxy.issueProperty().get();
+        capacity = proxy.capacityProperty().get();
+        lifting = proxy.liftingProperty().get();
+        span = proxy.spanProperty().get();
+    }
+
     public Crane(String name, String mark, String mode, String zav, String reg, String factory, String issue, String capacity, String lifting, String span) {
         this.name = name;
         this.mark = mark;
