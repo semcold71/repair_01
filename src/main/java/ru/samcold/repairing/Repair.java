@@ -4,6 +4,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
+import ru.samcold.utils.AlertManager;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,6 +25,25 @@ public class Repair {
     // endregion
 
     private final MyDocument myDocument = MyDocument.getInstance();
+
+    public String extractRTK() {
+        int i = 0;
+        String foundText;
+
+        while (true) {
+            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
+            i++;
+            if (foundText.contains("РТК")) {
+                foundText = foundText.replaceAll("\\D+", "");
+                break;
+            }
+            if (i >= myDocument.getTemplate().getParagraphs().size()) {
+                foundText = "Не найдено";
+                break;
+            }
+        }
+        return foundText;
+    }
 
     public Customer extractCustomer() throws IllegalAccessException {
         Customer customer = new Customer();

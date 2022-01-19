@@ -11,16 +11,20 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.proxy.CustomerProxy;
 import ru.samcold.repairing.Repair;
+import ru.samcold.utils.AlertManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MainController {
 
@@ -107,8 +111,13 @@ public class MainController {
 
     private void initButtons() {
         btn_LoadTemplate.setOnAction(actionEvent -> openTemplate());
+
         btn_ExtractCustomer.setOnAction(actionEvent -> extractCustomer());
         btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
+
+        btn_ExtractCrane.setOnAction(actionEvent -> {
+            System.out.println(repair.extractRTK());
+        });
     }
 
     private void openTemplate() {
