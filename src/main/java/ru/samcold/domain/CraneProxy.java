@@ -1,7 +1,6 @@
 package ru.samcold.domain;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class CraneProxy {
     private final StringProperty name = new SimpleStringProperty();
@@ -10,10 +9,11 @@ public class CraneProxy {
     private final StringProperty zav = new SimpleStringProperty();
     private final StringProperty reg = new SimpleStringProperty();
     private final StringProperty factory = new SimpleStringProperty();
-    private final StringProperty issue = new SimpleStringProperty();
-    private final StringProperty capacity = new SimpleStringProperty();
-    private final StringProperty lifting = new SimpleStringProperty();
-    private final StringProperty span = new SimpleStringProperty();
+    private final IntegerProperty issue = new SimpleIntegerProperty();
+    private final DoubleProperty capacity = new SimpleDoubleProperty();
+    private final DoubleProperty lifting = new SimpleDoubleProperty();
+    private final DoubleProperty span = new SimpleDoubleProperty();
+    private final DoubleProperty track = new SimpleDoubleProperty();
 
     public StringProperty nameProperty() {
         return name;
@@ -39,20 +39,24 @@ public class CraneProxy {
         return factory;
     }
 
-    public StringProperty issueProperty() {
+    public IntegerProperty issueProperty() {
         return issue;
     }
 
-    public StringProperty capacityProperty() {
+    public DoubleProperty capacityProperty() {
         return capacity;
     }
 
-    public StringProperty liftingProperty() {
+    public DoubleProperty liftingProperty() {
         return lifting;
     }
 
-    public StringProperty spanProperty() {
+    public DoubleProperty spanProperty() {
         return span;
+    }
+
+    public DoubleProperty trackProperty() {
+        return track;
     }
 
     public void fromCrane(Crane crane) {
@@ -66,5 +70,6 @@ public class CraneProxy {
         capacity.set(crane.getCapacity());
         lifting.set(crane.getLifting());
         span.set(crane.getSpan());
+        track.set(crane.getTrack());
     }
 }

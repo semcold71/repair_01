@@ -7,10 +7,11 @@ public class Crane {
     private String zav;         // зав.№
     private String reg;         // рег.№
     private String factory;     // завод-изготовитель
-    private String issue;       // год выпуска
-    private String capacity;    // грузоподъемность
-    private String lifting;     // высота подъема
-    private String span;        // пролет (вылет)
+    private int issue;          // год выпуска
+    private double capacity;    // грузоподъемность
+    private double lifting;     // высота подъема
+    private double span;        // пролет (вылет)
+    private double track;       // колея
 
     public Crane() {
     }
@@ -28,19 +29,7 @@ public class Crane {
         span = proxy.spanProperty().get();
     }
 
-    public Crane(String name, String mark, String mode, String zav, String reg, String factory, String issue, String capacity, String lifting, String span) {
-        this.name = name;
-        this.mark = mark;
-        this.mode = mode;
-        this.zav = zav;
-        this.reg = reg;
-        this.factory = factory;
-        this.issue = issue;
-        this.capacity = capacity;
-        this.lifting = lifting;
-        this.span = span;
-    }
-
+    //region getters/setters
     public String getName() {
         return name;
     }
@@ -89,37 +78,46 @@ public class Crane {
         this.factory = factory;
     }
 
-    public String getIssue() {
+    public int getIssue() {
         return issue;
     }
 
-    public void setIssue(String issue) {
+    public void setIssue(int issue) {
         this.issue = issue;
     }
 
-    public String getCapacity() {
+    public double getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(String capacity) {
+    public void setCapacity(double capacity) {
         this.capacity = capacity;
     }
 
-    public String getLifting() {
+    public double getLifting() {
         return lifting;
     }
 
-    public void setLifting(String lifting) {
+    public void setLifting(double lifting) {
         this.lifting = lifting;
     }
 
-    public String getSpan() {
+    public double getSpan() {
         return span;
     }
 
-    public void setSpan(String span) {
+    public void setSpan(double span) {
         this.span = span;
     }
+
+    public double getTrack() {
+        return track;
+    }
+
+    public void setTrack(double track) {
+        this.track = track;
+    }
+    //endregion
 
     @Override
     public String toString() {
@@ -134,6 +132,7 @@ public class Crane {
                 ", capacity='" + capacity + '\'' +
                 ", lifting='" + lifting + '\'' +
                 ", span='" + span + '\'' +
+                ", track='" + track + '\'' +
                 '}';
     }
 }
