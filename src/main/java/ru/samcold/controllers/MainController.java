@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.proxy.CustomerProxy;
 import ru.samcold.repairing.Repair;
