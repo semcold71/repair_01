@@ -1,10 +1,11 @@
 package ru.samcold.repairing;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
-import ru.samcold.utils.AlertManager;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -45,10 +46,8 @@ public class Repair {
         return foundText;
     }
 
-    public Customer extractCustomer() throws IllegalAccessException {
-        Customer customer = new Customer();
-
-        Class<?> cls = customer.getClass();
+    public void extractCustomer(Customer proxy) throws IllegalAccessException {
+        Class<?> cls = proxy.getClass();
         Field[] fields = cls.getDeclaredFields();
 
         List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(1).getRows();
@@ -56,11 +55,11 @@ public class Repair {
             int cellsCount = rows.get(i).getTableCells().size() - 1;
             List<XWPFParagraph> paras = rows.get(i).getCell(cellsCount).getParagraphs();
             String s = paragraphToLine(paras);
-            fields[i].setAccessible(true);
-            fields[i].set(customer, s);
+            if (fields[i].getType().isAssignableFrom(StringProperty.class)) {
+                fields[i].setAccessible(true);
+                fields[i].set(proxy, new SimpleStringProperty(s));
+            }
         }
-
-        return customer;
     }
 
     private String paragraphToLine(List<XWPFParagraph> paragraphs) {

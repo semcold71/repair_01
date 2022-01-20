@@ -11,20 +11,16 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import ru.samcold.domain.MyDocument;
-import ru.samcold.domain.proxy.CustomerProxy;
+import ru.samcold.domain.Customer;
 import ru.samcold.repairing.Repair;
-import ru.samcold.utils.AlertManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class MainController {
 
@@ -69,34 +65,34 @@ public class MainController {
     private final Repair repair = Repair.getInstance();
     private final BooleanProperty isLoaded = new SimpleBooleanProperty();
 
-    private CustomerProxy customerProxy;
+    private Customer customer;
     private ValidationSupport validationSupport;
 
     @FXML
     void initialize() {
-        isLoaded.set(false);
-        customerProxy = new CustomerProxy();
+        customer = new Customer();
         validationSupport = new ValidationSupport();
+        isLoaded.set(false);
+        btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
+
         initFields();
         initButtons();
     }
 
     private void initFields() {
         // bind
-        txt_CustomerName.textProperty().bindBidirectional(customerProxy.nameProperty());
-        txt_CustomerZip.textProperty().bindBidirectional(customerProxy.zipProperty());
-        txt_CustomerRegion.textProperty().bindBidirectional(customerProxy.regionProperty());
-        txt_CustomerCity.textProperty().bindBidirectional(customerProxy.cityProperty());
-        txt_CustomerAddress.textProperty().bindBidirectional(customerProxy.addressProperty());
-        txt_CustomerBoss.textProperty().bindBidirectional(customerProxy.bossProperty());
-        txt_CustomerPost.textProperty().bindBidirectional(customerProxy.postProperty());
-        txt_CustomerPhone.textProperty().bindBidirectional(customerProxy.phoneProperty());
+        txt_CustomerName.textProperty().bindBidirectional(customer.nameProperty());
+        txt_CustomerZip.textProperty().bindBidirectional(customer.zipProperty());
+        txt_CustomerRegion.textProperty().bindBidirectional(customer.regionProperty());
+        txt_CustomerCity.textProperty().bindBidirectional(customer.cityProperty());
+        txt_CustomerAddress.textProperty().bindBidirectional(customer.addressProperty());
+        txt_CustomerBoss.textProperty().bindBidirectional(customer.bossProperty());
+        txt_CustomerPost.textProperty().bindBidirectional(customer.postProperty());
+        txt_CustomerPhone.textProperty().bindBidirectional(customer.phoneProperty());
 
         // validator
         List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
         setValidation(list);
-
-        // btn_Save ...
     }
 
     private void setValidation(List<Node> nodeList) {
@@ -112,11 +108,17 @@ public class MainController {
     private void initButtons() {
         btn_LoadTemplate.setOnAction(actionEvent -> openTemplate());
 
-        btn_ExtractCustomer.setOnAction(actionEvent -> extractCustomer());
-        btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
+        btn_ExtractCustomer.setOnAction(actionEvent -> {
+            try {
+                repair.extractCustomer(customer);
+                initFields();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
 
         btn_ExtractCrane.setOnAction(actionEvent -> {
-            System.out.println(repair.extractRTK());
+            System.out.println(customer.nameProperty().get());
         });
     }
 
@@ -136,16 +138,8 @@ public class MainController {
         try {
             myDocument.setTemplate(path);
             isLoaded.set(true);
+
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void extractCustomer() {
-        try {
-            customerProxy.fromCustomer(repair.extractCustomer());
-
-        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
