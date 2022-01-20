@@ -9,7 +9,10 @@ public class Crane {
     private final StringProperty zav = new SimpleStringProperty();      // зав.№
     private final StringProperty reg = new SimpleStringProperty();      // рег.№
     private final StringProperty factory = new SimpleStringProperty();  // завод-изготовитель
-    private final IntegerProperty issue = new SimpleIntegerProperty();  // год выпуска
+
+    // чтобы привязывался combobox надо делать ObjectProperty<Integer>, а не IntegerProperty
+    private final ObjectProperty<Integer> issue = new SimpleObjectProperty<>();  // год выпуска
+
     private final DoubleProperty capacity = new SimpleDoubleProperty(); // грузоподъемность
     private final DoubleProperty lifting = new SimpleDoubleProperty();  // высота подъема
     private final DoubleProperty span = new SimpleDoubleProperty();     // пролет (вылет)
@@ -39,7 +42,7 @@ public class Crane {
         return factory;
     }
 
-    public IntegerProperty issueProperty() {
+    public ObjectProperty<Integer> issueProperty() {
         return issue;
     }
 

@@ -1,30 +1,39 @@
 package ru.samcold.controllers;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.Observable;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import ru.samcold.domain.Crane;
 import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.Customer;
 import ru.samcold.repairing.Repair;
+import ru.samcold.utils.NumberPropertyBinder;
+import ru.samcold.utils.NumberValidator;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class MainController {
 
-    //region FXML
+    /**
+     * FXML field
+     */
+    //region Customer
     @FXML
     private TitledPane pane_Customer;
     @FXML
@@ -50,22 +59,68 @@ public class MainController {
     @FXML
     private TextField txt_CustomerZip;
     //endregion
+    //region Crane
+    @FXML
+    private TitledPane pane_Crane;
+
+    @FXML
+    private TextField txt_CraneName;
+
+    @FXML
+    private TextField txt_CraneMark;
+
+    @FXML
+    private TextField txt_CraneMode;
+
+    @FXML
+    private TextField txt_CraneReg;
+
+    @FXML
+    private TextField txt_CraneZav;
+
+    @FXML
+    private TextField txt_CraneFactory;
+
+    @FXML
+    private ComboBox<Integer> cbo_CraneIssue;
+
+    @FXML
+    private TextField txt_CraneSpan;
+
+    @FXML
+    private TextField txt_CraneCapacity;
+
+    @FXML
+    private TextField txt_CraneTrack;
+
+    @FXML
+    private TextField txt_CraneLifting;
+    //endregion
+
+    private final ObservableList<Integer> years = FXCollections.observableArrayList(
+            IntStream.rangeClosed(1950, LocalDate.now().getYear()).boxed().collect(Collectors.toList()));
 
     private final MyDocument myDocument = MyDocument.getInstance();
     private final Repair repair = Repair.getInstance();
+    private final NumberPropertyBinder numberBinder = NumberPropertyBinder.getInstance();
     private final BooleanProperty isLoaded = new SimpleBooleanProperty();
 
     private Customer customer;
+    private Crane crane;
     private ValidationSupport validationSupport;
 
     @FXML
     void initialize() {
         customer = new Customer();
+        crane = new Crane();
         validationSupport = new ValidationSupport();
         isLoaded.set(false);
         btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
 
+        cbo_CraneIssue.setItems(years);
+
         initCustomerFields();
+        initCraneFields();
         initButtons();
     }
 
@@ -80,18 +135,34 @@ public class MainController {
         txt_CustomerPost.textProperty().bindBidirectional(customer.postProperty());
         txt_CustomerPhone.textProperty().bindBidirectional(customer.phoneProperty());
 
+
         // validator
-        List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
+        List<Node> list = ((Pane) pane_Crane.getContent()).getChildren();
         setValidation(list);
     }
 
     private void initCraneFields() {
+        // bind
+        txt_CraneName.textProperty().bindBidirectional(crane.nameProperty());
+        txt_CraneMark.textProperty().bindBidirectional(crane.markProperty());
+        txt_CraneMode.textProperty().bindBidirectional(crane.modeProperty());
+        txt_CraneZav.textProperty().bindBidirectional(crane.zavProperty());
+        txt_CraneReg.textProperty().bindBidirectional(crane.regProperty());
+        txt_CraneFactory.textProperty().bindBidirectional(crane.factoryProperty());
+        cbo_CraneIssue.valueProperty().bindBidirectional(crane.issueProperty());
+        numberBinder.bind(txt_CraneCapacity, crane.capacityProperty());
+        numberBinder.bind(txt_CraneLifting, crane.liftingProperty());
+        numberBinder.bind(txt_CraneSpan, crane.spanProperty());
+        numberBinder.bind(txt_CraneTrack, crane.trackProperty());
 
+        // validation
+        List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
+        setValidation(list);
     }
 
     private void setValidation(List<Node> nodeList) {
         for (Node node : nodeList) {
-            if (node instanceof TextField) {
+            if (node instanceof TextField || node instanceof ComboBox) {
                 validationSupport.registerValidator((Control) node, Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR));
             } else if (node instanceof Pane) {
                 setValidation(((Pane) node).getChildren());
@@ -112,7 +183,12 @@ public class MainController {
         });
 
         btn_ExtractCrane.setOnAction(actionEvent -> {
-            System.out.println(customer.nameProperty().get());
+            // test
+            crane.issueProperty().set(1960);
+            crane.capacityProperty().set(666.66);
+            crane.liftingProperty().set(123.33);
+            crane.spanProperty().set(324.45);
+            crane.trackProperty().set(234.87);
         });
     }
 
@@ -123,7 +199,9 @@ public class MainController {
         fileChooser.setTitle("Выбрать документ для редактирования");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Microsoft Word (.docx)", "*.docx"));
-        File res = fileChooser.showOpenDialog(new Stage());
+
+        Stage stage = (Stage) btn_ExtractCrane.getScene().getWindow();
+        File res = fileChooser.showOpenDialog(stage);
 
         if (res != null) {
             path = res.getAbsolutePath();

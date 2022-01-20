@@ -324,6 +324,10 @@
 	-fx-pref-height: 30;
 }
 
+.combo-box .cell {
+    -fx-text-fill: #BBBBBB;
+}
+
 .combo-box:hover {
     -fx-effect: none;
 }
@@ -369,8 +373,6 @@
 .combo-box:editable > .arrow-button:pressed {
     -fx-effect: none;
 }
-
-
 
 /* ============ */
 .titled-pane {
