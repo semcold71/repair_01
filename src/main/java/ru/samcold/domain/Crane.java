@@ -1,138 +1,61 @@
 package ru.samcold.domain;
 
+import javafx.beans.property.*;
+
 public class Crane {
-    private String name;        // наименование, тип
-    private String mark;        // марка
-    private String mode;        // исполнение
-    private String zav;         // зав.№
-    private String reg;         // рег.№
-    private String factory;     // завод-изготовитель
-    private int issue;          // год выпуска
-    private double capacity;    // грузоподъемность
-    private double lifting;     // высота подъема
-    private double span;        // пролет (вылет)
-    private double track;       // колея
+    private final StringProperty name = new SimpleStringProperty();     // наименование, тип
+    private final StringProperty mark = new SimpleStringProperty();     // марка
+    private final StringProperty mode = new SimpleStringProperty();     // исполнение
+    private final StringProperty zav = new SimpleStringProperty();      // зав.№
+    private final StringProperty reg = new SimpleStringProperty();      // рег.№
+    private final StringProperty factory = new SimpleStringProperty();  // завод-изготовитель
+    private final IntegerProperty issue = new SimpleIntegerProperty();  // год выпуска
+    private final DoubleProperty capacity = new SimpleDoubleProperty(); // грузоподъемность
+    private final DoubleProperty lifting = new SimpleDoubleProperty();  // высота подъема
+    private final DoubleProperty span = new SimpleDoubleProperty();     // пролет (вылет)
+    private final DoubleProperty track = new SimpleDoubleProperty();    // колея
 
-    public Crane() {
-    }
-
-    public Crane(CraneProxy proxy) {
-        name = proxy.nameProperty().get();
-        mark = proxy.markProperty().get();
-        mode = proxy.modeProperty().get();
-        zav = proxy.zavProperty().get();
-        reg = proxy.regProperty().get();
-        factory = proxy.factoryProperty().get();
-        issue = proxy.issueProperty().get();
-        capacity = proxy.capacityProperty().get();
-        lifting = proxy.liftingProperty().get();
-        span = proxy.spanProperty().get();
-    }
-
-    //region getters/setters
-    public String getName() {
+    public StringProperty nameProperty() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMark() {
+    public StringProperty markProperty() {
         return mark;
     }
 
-    public void setMark(String mark) {
-        this.mark = mark;
-    }
-
-    public String getMode() {
+    public StringProperty modeProperty() {
         return mode;
     }
 
-    public void setMode(String mode) {
-        this.mode = mode;
-    }
-
-    public String getZav() {
+    public StringProperty zavProperty() {
         return zav;
     }
 
-    public void setZav(String zav) {
-        this.zav = zav;
-    }
-
-    public String getReg() {
+    public StringProperty regProperty() {
         return reg;
     }
 
-    public void setReg(String reg) {
-        this.reg = reg;
-    }
-
-    public String getFactory() {
+    public StringProperty factoryProperty() {
         return factory;
     }
 
-    public void setFactory(String factory) {
-        this.factory = factory;
-    }
-
-    public int getIssue() {
+    public IntegerProperty issueProperty() {
         return issue;
     }
 
-    public void setIssue(int issue) {
-        this.issue = issue;
-    }
-
-    public double getCapacity() {
+    public DoubleProperty capacityProperty() {
         return capacity;
     }
 
-    public void setCapacity(double capacity) {
-        this.capacity = capacity;
-    }
-
-    public double getLifting() {
+    public DoubleProperty liftingProperty() {
         return lifting;
     }
 
-    public void setLifting(double lifting) {
-        this.lifting = lifting;
-    }
-
-    public double getSpan() {
+    public DoubleProperty spanProperty() {
         return span;
     }
 
-    public void setSpan(double span) {
-        this.span = span;
-    }
-
-    public double getTrack() {
+    public DoubleProperty trackProperty() {
         return track;
-    }
-
-    public void setTrack(double track) {
-        this.track = track;
-    }
-    //endregion
-
-    @Override
-    public String toString() {
-        return "Crane{" +
-                "name='" + name + '\'' +
-                ", mark='" + mark + '\'' +
-                ", mode='" + mode + '\'' +
-                ", zav='" + zav + '\'' +
-                ", reg='" + reg + '\'' +
-                ", factory='" + factory + '\'' +
-                ", issue='" + issue + '\'' +
-                ", capacity='" + capacity + '\'' +
-                ", lifting='" + lifting + '\'' +
-                ", span='" + span + '\'' +
-                ", track='" + track + '\'' +
-                '}';
     }
 }

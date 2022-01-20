@@ -29,34 +29,24 @@ public class MainController {
     private TitledPane pane_Customer;
     @FXML
     private Button btn_ExtractCrane;
-
     @FXML
     private Button btn_ExtractCustomer;
-
     @FXML
     private Button btn_LoadTemplate;
-
     @FXML
     private TextField txt_CustomerAddress;
-
     @FXML
     private TextField txt_CustomerBoss;
-
     @FXML
     private TextField txt_CustomerCity;
-
     @FXML
     private TextField txt_CustomerName;
-
     @FXML
     private TextField txt_CustomerPhone;
-
     @FXML
     private TextField txt_CustomerPost;
-
     @FXML
     private TextField txt_CustomerRegion;
-
     @FXML
     private TextField txt_CustomerZip;
     //endregion
@@ -75,11 +65,11 @@ public class MainController {
         isLoaded.set(false);
         btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
 
-        initFields();
+        initCustomerFields();
         initButtons();
     }
 
-    private void initFields() {
+    private void initCustomerFields() {
         // bind
         txt_CustomerName.textProperty().bindBidirectional(customer.nameProperty());
         txt_CustomerZip.textProperty().bindBidirectional(customer.zipProperty());
@@ -93,6 +83,10 @@ public class MainController {
         // validator
         List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
         setValidation(list);
+    }
+
+    private void initCraneFields() {
+
     }
 
     private void setValidation(List<Node> nodeList) {
@@ -111,7 +105,7 @@ public class MainController {
         btn_ExtractCustomer.setOnAction(actionEvent -> {
             try {
                 repair.extractCustomer(customer);
-                initFields();
+                initCustomerFields();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
