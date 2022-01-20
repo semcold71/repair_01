@@ -177,6 +177,7 @@ public class MainController {
             try {
                 repair.extractCustomer(customer);
                 initCustomerFields();
+                pane_Customer.setExpanded(true);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -189,6 +190,7 @@ public class MainController {
             crane.liftingProperty().set(123.33);
             crane.spanProperty().set(324.45);
             crane.trackProperty().set(234.87);
+            pane_Crane.setExpanded(true);
         });
     }
 
