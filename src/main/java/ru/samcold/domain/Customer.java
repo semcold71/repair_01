@@ -3,6 +3,8 @@ package ru.samcold.domain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.lang.reflect.Field;
+
 public class Customer {
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty zip = new SimpleStringProperty();
@@ -43,6 +45,17 @@ public class Customer {
 
     public StringProperty phoneProperty() {
         return phone;
+    }
+
+    public void clear() {
+        nameProperty().set("");
+        zipProperty().set("");
+        regionProperty().set("");
+        cityProperty().set("");
+        addressProperty().set("");
+        bossProperty().set("");
+        postProperty().set("");
+        phoneProperty().set("");
     }
 
 }

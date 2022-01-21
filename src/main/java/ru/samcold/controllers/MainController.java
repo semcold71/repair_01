@@ -19,7 +19,6 @@ import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.Customer;
 import ru.samcold.repairing.Repair;
 import ru.samcold.utils.NumberPropertyBinder;
-import ru.samcold.utils.NumberValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,8 +123,31 @@ public class MainController {
         initButtons();
     }
 
+    private void openTemplate() {
+        String path;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Выбрать документ для редактирования");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Microsoft Word (.docx)", "*.docx"));
+
+        Stage stage = (Stage) btn_ExtractCrane.getScene().getWindow();
+        File res = fileChooser.showOpenDialog(stage);
+
+        if (res != null) {
+            path = res.getAbsolutePath();
+        } else return;
+
+        try {
+            myDocument.setTemplate(path);
+            isLoaded.set(true);
+            customer.clear();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initCustomerFields() {
-        // bind
         txt_CustomerName.textProperty().bindBidirectional(customer.nameProperty());
         txt_CustomerZip.textProperty().bindBidirectional(customer.zipProperty());
         txt_CustomerRegion.textProperty().bindBidirectional(customer.regionProperty());
@@ -134,7 +156,6 @@ public class MainController {
         txt_CustomerBoss.textProperty().bindBidirectional(customer.bossProperty());
         txt_CustomerPost.textProperty().bindBidirectional(customer.postProperty());
         txt_CustomerPhone.textProperty().bindBidirectional(customer.phoneProperty());
-
 
         // validator
         List<Node> list = ((Pane) pane_Crane.getContent()).getChildren();
@@ -194,27 +215,4 @@ public class MainController {
         });
     }
 
-    private void openTemplate() {
-        String path;
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Выбрать документ для редактирования");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Microsoft Word (.docx)", "*.docx"));
-
-        Stage stage = (Stage) btn_ExtractCrane.getScene().getWindow();
-        File res = fileChooser.showOpenDialog(stage);
-
-        if (res != null) {
-            path = res.getAbsolutePath();
-        } else return;
-
-        try {
-            myDocument.setTemplate(path);
-            isLoaded.set(true);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

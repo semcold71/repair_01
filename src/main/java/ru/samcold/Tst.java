@@ -14,6 +14,20 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Tst {
+    private String str;
+
+    public Tst(String str) {
+        this.str = str;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
     public static void main(String[] args) {
         IntStream stream = IntStream.rangeClosed(1,10);
         List<Integer> l1 = new ArrayList<>(Arrays.asList(1,2,3));
