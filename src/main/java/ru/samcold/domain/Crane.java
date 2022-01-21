@@ -16,7 +16,6 @@ public class Crane {
     private final DoubleProperty capacity = new SimpleDoubleProperty(); // грузоподъемность
     private final DoubleProperty lifting = new SimpleDoubleProperty();  // высота подъема
     private final DoubleProperty span = new SimpleDoubleProperty();     // пролет (вылет)
-    private final DoubleProperty track = new SimpleDoubleProperty();    // колея
 
     public StringProperty nameProperty() {
         return name;
@@ -56,9 +55,5 @@ public class Crane {
 
     public DoubleProperty spanProperty() {
         return span;
-    }
-
-    public DoubleProperty trackProperty() {
-        return track;
     }
 }

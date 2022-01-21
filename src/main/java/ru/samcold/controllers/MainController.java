@@ -90,9 +90,6 @@ public class MainController {
     private TextField txt_CraneCapacity;
 
     @FXML
-    private TextField txt_CraneTrack;
-
-    @FXML
     private TextField txt_CraneLifting;
     //endregion
 
@@ -174,7 +171,6 @@ public class MainController {
         numberBinder.bind(txt_CraneCapacity, crane.capacityProperty());
         numberBinder.bind(txt_CraneLifting, crane.liftingProperty());
         numberBinder.bind(txt_CraneSpan, crane.spanProperty());
-        numberBinder.bind(txt_CraneTrack, crane.trackProperty());
 
         // validation
         List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
@@ -210,7 +206,7 @@ public class MainController {
             crane.capacityProperty().set(666.66);
             crane.liftingProperty().set(123.33);
             crane.spanProperty().set(324.45);
-            crane.trackProperty().set(234.87);
+
             pane_Crane.setExpanded(true);
         });
     }
