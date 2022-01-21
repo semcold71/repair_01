@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import ru.samcold.domain.Act;
 import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
 
@@ -27,7 +28,7 @@ public class Repair {
 
     private final MyDocument myDocument = MyDocument.getInstance();
 
-    public String extractRTK() {
+    public String foundRTK() {
         int i = 0;
         String foundText;
 
@@ -44,6 +45,27 @@ public class Repair {
             }
         }
         return foundText;
+    }
+
+    public Act extractAct() {
+        Act act = new Act();
+
+        // РТК
+        act.rtkProperty().set(foundRTK());
+
+        // Договор
+        act.contractNumberProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
+        act.contractDateProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
+
+        // Приказ
+        act.orderNumberProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
+        act.orderDateProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
+
+        return act;
     }
 
     public void extractCustomer(Customer proxy) throws IllegalAccessException {

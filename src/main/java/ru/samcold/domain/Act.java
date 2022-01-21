@@ -4,15 +4,15 @@ import javafx.beans.property.*;
 import java.util.Date;
 
 public class Act {
-    private final IntegerProperty rtk = new SimpleIntegerProperty();
+    private final StringProperty rtk = new SimpleStringProperty();
     private final StringProperty contractNumber = new SimpleStringProperty();
-    private final ObjectProperty<Date> contractDate = new SimpleObjectProperty<>();
+    private final StringProperty contractDate = new SimpleStringProperty();
     private final StringProperty orderNumber = new SimpleStringProperty();
-    private final ObjectProperty<Date> orderDate = new SimpleObjectProperty<>();
+    private final StringProperty orderDate = new SimpleStringProperty();
     private final StringProperty location = new SimpleStringProperty();
     private final StringProperty period = new SimpleStringProperty();
 
-    public IntegerProperty rtkProperty() {
+    public StringProperty rtkProperty() {
         return rtk;
     }
 
@@ -20,7 +20,7 @@ public class Act {
         return contractNumber;
     }
 
-    public ObjectProperty<Date> contractDateProperty() {
+    public StringProperty contractDateProperty() {
         return contractDate;
     }
 
@@ -28,7 +28,7 @@ public class Act {
         return orderNumber;
     }
 
-    public ObjectProperty<Date> orderDateProperty() {
+    public StringProperty orderDateProperty() {
         return orderDate;
     }
 
