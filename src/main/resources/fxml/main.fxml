@@ -12,59 +12,74 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1000.0" styleClass="anchor-pane" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.samcold.controllers.MainController">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" styleClass="anchor-pane" stylesheets="@../styles/style.css"
+            xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.samcold.controllers.MainController">
     <children>
-        <HBox layoutX="14.0" layoutY="14.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+        <HBox layoutX="14.0" layoutY="14.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"
+              AnchorPane.topAnchor="14.0">
             <children>
-                <Button fx:id="btn_LoadTemplate" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Загрузить образец" />
-                <Button fx:id="btn_ExtractCustomer" mnemonicParsing="false" text="Извлечь заказчика" />
-                <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС" />
+                <Button fx:id="btn_LoadTemplate" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0"
+                        text="Загрузить образец"/>
+                <Button fx:id="btn_ExtractCustomer" mnemonicParsing="false" text="Извлечь заказчика"/>
+                <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС"/>
             </children>
         </HBox>
-        <Accordion layoutX="14.0" layoutY="84.0" prefHeight="631.0" prefWidth="972.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="58.0">
+        <Accordion layoutX="14.0" layoutY="84.0" prefHeight="631.0" prefWidth="972.0" AnchorPane.leftAnchor="14.0"
+                   AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="58.0">
             <panes>
                 <TitledPane fx:id="pane_Customer" expanded="false" text="Заказчик">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <GridPane hgap="10.0" vgap="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <GridPane hgap="10.0" vgap="6.0" AnchorPane.leftAnchor="0.0"
+                                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columnConstraints>
-                                        <ColumnConstraints halignment="RIGHT" minWidth="10.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                        <ColumnConstraints halignment="RIGHT" minWidth="10.0"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints maxHeight="34.0" minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints maxHeight="34.0" minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
                                     </rowConstraints>
                                     <children>
-                                        <Label text="Наименование" GridPane.halignment="RIGHT" />
-                                        <Label text="Область/край" GridPane.rowIndex="4" />
-                                        <Label text="Индекс" GridPane.rowIndex="3" />
-                                        <TextField fx:id="txt_CustomerName" GridPane.columnIndex="1" />
-                                        <TextField fx:id="txt_CustomerRegion" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                        <TextField fx:id="txt_CustomerZip" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                        <Label text="ФИО" GridPane.rowIndex="9" />
-                                        <Label text="Улица, дом" GridPane.rowIndex="6" />
-                                        <Label text="Город" GridPane.rowIndex="5" />
-                                        <Label text="Должность" GridPane.rowIndex="10" />
-                                        <Label text="Тел/факс" GridPane.rowIndex="11" />
-                                        <TextField fx:id="txt_CustomerPhone" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                                        <TextField fx:id="txt_CustomerPost" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                                        <TextField fx:id="txt_CustomerBoss" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                        <TextField fx:id="txt_CustomerAddress" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                        <TextField fx:id="txt_CustomerCity" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label style="-fx-text-fill: grey; -fx-underline: true;" text="Адрес:" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                              <Label style="-fx-text-fill: grey; -fx-underline: true;" text="Руководитель" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                                        <Label text="Наименование" GridPane.halignment="RIGHT"/>
+                                        <Label text="Область/край" GridPane.rowIndex="4"/>
+                                        <Label text="Индекс" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="txt_CustomerName" GridPane.columnIndex="1"/>
+                                        <TextField fx:id="txt_CustomerRegion" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="4"/>
+                                        <TextField fx:id="txt_CustomerZip" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="3"/>
+                                        <Label text="ФИО" GridPane.rowIndex="9"/>
+                                        <Label text="Улица, дом" GridPane.rowIndex="6"/>
+                                        <Label text="Город" GridPane.rowIndex="5"/>
+                                        <Label text="Должность" GridPane.rowIndex="10"/>
+                                        <Label text="Тел/факс" GridPane.rowIndex="11"/>
+                                        <TextField fx:id="txt_CustomerPhone" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="11"/>
+                                        <TextField fx:id="txt_CustomerPost" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="10"/>
+                                        <TextField fx:id="txt_CustomerBoss" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="9"/>
+                                        <TextField fx:id="txt_CustomerAddress" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="6"/>
+                                        <TextField fx:id="txt_CustomerCity" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="5"/>
+                                        <Label style="-fx-text-fill: grey; -fx-underline: true;" text="Адрес:"
+                                               GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
+                                        <Label style="-fx-text-fill: grey; -fx-underline: true;" text="Руководитель"
+                                               GridPane.halignment="CENTER" GridPane.rowIndex="8"/>
                                     </children>
                                 </GridPane>
                             </children>
@@ -74,62 +89,79 @@
                 <TitledPane fx:id="pane_Crane" expanded="false" text="ПС">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <GridPane hgap="10.0" layoutX="36.0" layoutY="67.0" vgap="8.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columnConstraints>
-                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label text="Наименование, тип" />
-                              <Label text="Завод-изготовитель" GridPane.rowIndex="7" />
-                              <Label text="Рег.№" GridPane.rowIndex="5" />
-                              <Label text="Зав.№" GridPane.rowIndex="4" />
-                              <Label text="Исполнение" GridPane.rowIndex="2" />
-                              <Label text="Марка" GridPane.rowIndex="1" />
-                              <Label text="Высота подъема, м" GridPane.rowIndex="11" />
-                              <Label text="Грузоподъемность, т" GridPane.rowIndex="10" />
-                              <Label text="Год выпуска" GridPane.rowIndex="8" />
-                              <Label text="Пролет (вылет), м" GridPane.rowIndex="12" />
-                              <Label text="Колея (?), м" GridPane.rowIndex="13" />
-                              <TextField fx:id="txt_CraneName" GridPane.columnIndex="1" GridPane.columnSpan="3" />
-                              <TextField fx:id="txt_CraneMark" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
-                              <TextField fx:id="txt_CraneMode" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
-                              <TextField fx:id="txt_CraneReg" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <TextField fx:id="txt_CraneZav" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <TextField fx:id="txt_CraneFactory" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="7" />
-                              <TextField fx:id="txt_CraneSpan" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                              <TextField fx:id="txt_CraneCapacity" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                              <TextField fx:id="txt_CraneTrack" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                              <TextField fx:id="txt_CraneLifting" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                              <Label style="-fx-text-fill: grey;" text="(для кранов, установленных на рельсовом пути)" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="13" />
-                              <ComboBox fx:id="cbo_CraneIssue" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                           </children>
-                        </GridPane>
-                     </children></AnchorPane>
+                            <children>
+                                <GridPane hgap="10.0" layoutX="36.0" layoutY="67.0" vgap="8.0"
+                                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                          AnchorPane.topAnchor="0.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0"
+                                                           prefWidth="100.0"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0"
+                                                           prefWidth="100.0"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    </rowConstraints>
+                                    <children>
+                                        <Label text="Наименование, тип"/>
+                                        <Label text="Завод-изготовитель" GridPane.rowIndex="7"/>
+                                        <Label text="Рег.№" GridPane.rowIndex="5"/>
+                                        <Label text="Зав.№" GridPane.rowIndex="4"/>
+                                        <Label text="Исполнение" GridPane.rowIndex="2"/>
+                                        <Label text="Марка" GridPane.rowIndex="1"/>
+                                        <Label text="Высота подъема, м" GridPane.rowIndex="11"/>
+                                        <Label text="Грузоподъемность, т" GridPane.rowIndex="10"/>
+                                        <Label text="Год выпуска" GridPane.rowIndex="8"/>
+                                        <Label text="Пролет (вылет), м" GridPane.rowIndex="12"/>
+                                        <Label text="Колея (?), м" GridPane.rowIndex="13"/>
+                                        <TextField fx:id="txt_CraneName" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="3"/>
+                                        <TextField fx:id="txt_CraneMark" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="3" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="txt_CraneMode" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="3" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="txt_CraneReg" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                                        <TextField fx:id="txt_CraneZav" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                        <TextField fx:id="txt_CraneFactory" GridPane.columnIndex="1"
+                                                   GridPane.columnSpan="3" GridPane.rowIndex="7"/>
+                                        <TextField fx:id="txt_CraneSpan" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="12"/>
+                                        <TextField fx:id="txt_CraneCapacity" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="10"/>
+                                        <TextField fx:id="txt_CraneTrack" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="13"/>
+                                        <TextField fx:id="txt_CraneLifting" GridPane.columnIndex="1"
+                                                   GridPane.rowIndex="11"/>
+                                        <Label style="-fx-text-fill: grey;"
+                                               text="(для кранов, установленных на рельсовом пути)"
+                                               GridPane.columnIndex="2" GridPane.columnSpan="2"
+                                               GridPane.halignment="LEFT" GridPane.rowIndex="13"/>
+                                        <ComboBox fx:id="cbo_CraneIssue" prefWidth="230.0" GridPane.columnIndex="1"
+                                                  GridPane.rowIndex="8"/>
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </TitledPane>
                 <TitledPane expanded="false" text="untitled 3">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
                     </content>
                 </TitledPane>
             </panes>
