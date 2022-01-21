@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import ru.samcold.Main;
-import ru.samcold.repairing.Repair;
 
 import java.util.Objects;
 

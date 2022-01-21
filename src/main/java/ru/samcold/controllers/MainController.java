@@ -1,6 +1,5 @@
 package ru.samcold.controllers;
 
-import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +9,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import ru.samcold.domain.Act;
 import ru.samcold.domain.Crane;
 import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.Customer;
-import ru.samcold.repairing.Repair;
+import ru.samcold.repairing.Extraction;
 import ru.samcold.utils.NumberPropertyBinder;
 
 import java.io.File;
@@ -97,18 +96,22 @@ public class MainController {
             IntStream.rangeClosed(1950, LocalDate.now().getYear()).boxed().collect(Collectors.toList()));
 
     private final MyDocument myDocument = MyDocument.getInstance();
-    private final Repair repair = Repair.getInstance();
+    private final Extraction extraction = Extraction.getInstance();
     private final NumberPropertyBinder numberBinder = NumberPropertyBinder.getInstance();
     private final BooleanProperty isLoaded = new SimpleBooleanProperty();
 
+    private Act act;
     private Customer customer;
     private Crane crane;
     private ValidationSupport validationSupport;
 
     @FXML
     void initialize() {
+
+        act = new Act();
         customer = new Customer();
         crane = new Crane();
+
         validationSupport = new ValidationSupport();
         isLoaded.set(false);
         btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
@@ -192,7 +195,7 @@ public class MainController {
 
         btn_ExtractCustomer.setOnAction(actionEvent -> {
             try {
-                repair.extractCustomer(customer);
+                customer = extraction.extractCustomer(customer);
                 initCustomerFields();
                 pane_Customer.setExpanded(true);
             } catch (IllegalAccessException e) {
@@ -201,6 +204,10 @@ public class MainController {
         });
 
         btn_ExtractCrane.setOnAction(actionEvent -> {
+
+            act = extraction.extractAct();
+            System.out.println(act);
+
             // test
             crane.issueProperty().set(1960);
             crane.capacityProperty().set(666.66);

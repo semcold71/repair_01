@@ -11,41 +11,22 @@ import ru.samcold.domain.MyDocument;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class Repair {
+public class Extraction {
     // region sinleton
-    private static Repair instance;
+    private static Extraction instance;
 
-    private Repair() {
+    private Extraction() {
     }
 
-    public static Repair getInstance() {
+    public static Extraction getInstance() {
         if (instance == null) {
-            instance = new Repair();
+            instance = new Extraction();
         }
         return instance;
     }
     // endregion
 
     private final MyDocument myDocument = MyDocument.getInstance();
-
-    public String foundRTK() {
-        int i = 0;
-        String foundText;
-
-        while (true) {
-            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
-            i++;
-            if (foundText.contains("РТК")) {
-                foundText = foundText.replaceAll("\\D+", "");
-                break;
-            }
-            if (i >= myDocument.getTemplate().getParagraphs().size()) {
-                foundText = "Не найдено";
-                break;
-            }
-        }
-        return foundText;
-    }
 
     public Act extractAct() {
         Act act = new Act();
@@ -65,11 +46,17 @@ public class Repair {
         act.orderDateProperty().set(
                 paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
 
+        // Дата и место проведения технического диагностирования
+        act.locationProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(0).getParagraphs()));
+        act.periodProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(1).getParagraphs()));
+
         return act;
     }
 
-    public void extractCustomer(Customer proxy) throws IllegalAccessException {
-        Class<?> cls = proxy.getClass();
+    public Customer extractCustomer(Customer customer) throws IllegalAccessException {
+        Class<?> cls = customer.getClass();
         Field[] fields = cls.getDeclaredFields();
 
         List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(1).getRows();
@@ -79,9 +66,11 @@ public class Repair {
             String s = paragraphToLine(paras);
             if (fields[i].getType().isAssignableFrom(StringProperty.class)) {
                 fields[i].setAccessible(true);
-                fields[i].set(proxy, new SimpleStringProperty(s));
+                fields[i].set(customer, new SimpleStringProperty(s));
             }
         }
+
+        return customer;
     }
 
     private String paragraphToLine(List<XWPFParagraph> paragraphs) {
@@ -94,6 +83,25 @@ public class Repair {
         str = str.replaceAll("\\s+", " ").trim();
 
         return str;
+    }
+
+    public String foundRTK() {
+        int i = 0;
+        String foundText;
+
+        while (true) {
+            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
+            i++;
+            if (foundText.contains("РТК")) {
+                foundText = foundText.replaceAll("\\D+", "");
+                break;
+            }
+            if (i >= myDocument.getTemplate().getParagraphs().size()) {
+                foundText = "Не найдено";
+                break;
+            }
+        }
+        return foundText;
     }
 
 }

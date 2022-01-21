@@ -39,4 +39,17 @@ public class Act {
     public StringProperty periodProperty() {
         return period;
     }
+
+    @Override
+    public String toString() {
+        return "Act{" +
+                "rtk=" + rtk +
+                ", contractNumber=" + contractNumber +
+                ", contractDate=" + contractDate +
+                ", orderNumber=" + orderNumber +
+                ", orderDate=" + orderDate +
+                ", location=" + location +
+                ", period=" + period +
+                '}';
+    }
 }
