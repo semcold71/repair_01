@@ -3,8 +3,6 @@ package ru.samcold.domain;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.lang.reflect.Field;
-
 public class Customer {
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty zip = new SimpleStringProperty();

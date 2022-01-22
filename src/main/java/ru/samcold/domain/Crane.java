@@ -9,13 +9,10 @@ public class Crane {
     private final StringProperty zav = new SimpleStringProperty();      // зав.№
     private final StringProperty reg = new SimpleStringProperty();      // рег.№
     private final StringProperty factory = new SimpleStringProperty();  // завод-изготовитель
-
-    // чтобы привязывался combobox надо делать ObjectProperty<Integer>, а не IntegerProperty
-    private final ObjectProperty<Integer> issue = new SimpleObjectProperty<>();  // год выпуска
-
-    private final DoubleProperty capacity = new SimpleDoubleProperty(); // грузоподъемность
-    private final DoubleProperty lifting = new SimpleDoubleProperty();  // высота подъема
-    private final DoubleProperty span = new SimpleDoubleProperty();     // пролет (вылет)
+    private final StringProperty issue = new SimpleStringProperty();  // год выпуска
+    private final StringProperty capacity = new SimpleStringProperty(); // грузоподъемность
+    private final StringProperty lifting = new SimpleStringProperty();  // высота подъема
+    private final StringProperty span = new SimpleStringProperty();     // пролет (вылет)
 
     public StringProperty nameProperty() {
         return name;
@@ -41,19 +38,35 @@ public class Crane {
         return factory;
     }
 
-    public ObjectProperty<Integer> issueProperty() {
+    public StringProperty issueProperty() {
         return issue;
     }
 
-    public DoubleProperty capacityProperty() {
+    public StringProperty capacityProperty() {
         return capacity;
     }
 
-    public DoubleProperty liftingProperty() {
+    public StringProperty liftingProperty() {
         return lifting;
     }
 
-    public DoubleProperty spanProperty() {
+    public StringProperty spanProperty() {
         return span;
+    }
+
+    @Override
+    public String toString() {
+        return "Crane{" +
+                "name=" + name +
+                ", mark=" + mark +
+                ", mode=" + mode +
+                ", zav=" + zav +
+                ", reg=" + reg +
+                ", factory=" + factory +
+                ", issue=" + issue +
+                ", capacity=" + capacity +
+                ", lifting=" + lifting +
+                ", span=" + span +
+                '}';
     }
 }

@@ -4,7 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import ru.samcold.domain.Act;
+import ru.samcold.domain.Rtk;
+import ru.samcold.domain.Crane;
 import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
 
@@ -12,7 +13,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class Extraction {
-    // region sinleton
+    // region singleton
     private static Extraction instance;
 
     private Extraction() {
@@ -28,31 +29,32 @@ public class Extraction {
 
     private final MyDocument myDocument = MyDocument.getInstance();
 
-    public Act extractAct() {
-        Act act = new Act();
+    // extraction
+    public Rtk extractRtk() {
+        Rtk rtk = new Rtk();
 
         // РТК
-        act.rtkProperty().set(foundRTK());
+        rtk.numberProperty().set(foundRTK());
 
         // Договор
-        act.contractNumberProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
-        act.contractDateProperty().set(
+        rtk.contractNumberProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(0).getCell(1).getParagraphs()));
+        rtk.contractDateProperty().set(
                 paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
 
         // Приказ
-        act.orderNumberProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
-        act.orderDateProperty().set(
+        rtk.orderNumberProperty().set(
+                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(0).getCell(1).getParagraphs()));
+        rtk.orderDateProperty().set(
                 paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
 
         // Дата и место проведения технического диагностирования
-        act.locationProperty().set(
+        rtk.periodProperty().set(
                 paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(0).getParagraphs()));
-        act.periodProperty().set(
+        rtk.locationProperty().set(
                 paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(1).getParagraphs()));
 
-        return act;
+        return rtk;
     }
 
     public Customer extractCustomer(Customer customer) throws IllegalAccessException {
@@ -60,7 +62,7 @@ public class Extraction {
         Field[] fields = cls.getDeclaredFields();
 
         List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(1).getRows();
-        for (int i = 0; i < rows.size(); i++) {
+        for (int i = 0; i < fields.length; i++) {
             int cellsCount = rows.get(i).getTableCells().size() - 1;
             List<XWPFParagraph> paras = rows.get(i).getCell(cellsCount).getParagraphs();
             String s = paragraphToLine(paras);
@@ -71,6 +73,45 @@ public class Extraction {
         }
 
         return customer;
+    }
+
+    public Crane extractCrane(Crane crane) throws IllegalAccessException {
+
+        Class<?> cls = crane.getClass();
+        Field[] fields = cls.getDeclaredFields();
+
+        List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(7).getRows();
+        for (int i = 0; i < fields.length; i++) {
+            int cellsCount = rows.get(i).getTableCells().size() - 1;
+            List<XWPFParagraph> paras = rows.get(i).getCell(cellsCount).getParagraphs();
+            String s = paragraphToLine(paras);
+            if (fields[i].getType().isAssignableFrom(StringProperty.class)) {
+                fields[i].setAccessible(true);
+                fields[i].set(crane, new SimpleStringProperty(s));
+            }
+        }
+
+        return crane;
+    }
+
+    // utils
+    public String foundRTK() {
+        int i = 0;
+        String foundText;
+
+        while (true) {
+            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
+            i++;
+            if (foundText.startsWith("РТК")) {
+                foundText = foundText.replaceAll("\\D+", "");
+                break;
+            }
+            if (i >= myDocument.getTemplate().getParagraphs().size()) {
+                foundText = "Не найдено";
+                break;
+            }
+        }
+        return foundText;
     }
 
     private String paragraphToLine(List<XWPFParagraph> paragraphs) {
@@ -85,23 +126,5 @@ public class Extraction {
         return str;
     }
 
-    public String foundRTK() {
-        int i = 0;
-        String foundText;
-
-        while (true) {
-            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
-            i++;
-            if (foundText.contains("РТК")) {
-                foundText = foundText.replaceAll("\\D+", "");
-                break;
-            }
-            if (i >= myDocument.getTemplate().getParagraphs().size()) {
-                foundText = "Не найдено";
-                break;
-            }
-        }
-        return foundText;
-    }
 
 }

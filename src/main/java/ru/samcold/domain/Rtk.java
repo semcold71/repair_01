@@ -1,19 +1,18 @@
 package ru.samcold.domain;
 
 import javafx.beans.property.*;
-import java.util.Date;
 
-public class Act {
-    private final StringProperty rtk = new SimpleStringProperty();
+public class Rtk {
+    private final StringProperty number = new SimpleStringProperty();
     private final StringProperty contractNumber = new SimpleStringProperty();
     private final StringProperty contractDate = new SimpleStringProperty();
     private final StringProperty orderNumber = new SimpleStringProperty();
     private final StringProperty orderDate = new SimpleStringProperty();
-    private final StringProperty location = new SimpleStringProperty();
     private final StringProperty period = new SimpleStringProperty();
+    private final StringProperty location = new SimpleStringProperty();
 
-    public StringProperty rtkProperty() {
-        return rtk;
+    public StringProperty numberProperty() {
+        return number;
     }
 
     public StringProperty contractNumberProperty() {
@@ -32,24 +31,24 @@ public class Act {
         return orderDate;
     }
 
-    public StringProperty locationProperty() {
-        return location;
-    }
-
     public StringProperty periodProperty() {
         return period;
     }
 
+    public StringProperty locationProperty() {
+        return location;
+    }
+
     @Override
     public String toString() {
-        return "Act{" +
-                "rtk=" + rtk +
+        return "Rtk{" +
+                "number=" + number +
                 ", contractNumber=" + contractNumber +
                 ", contractDate=" + contractDate +
                 ", orderNumber=" + orderNumber +
                 ", orderDate=" + orderDate +
-                ", location=" + location +
                 ", period=" + period +
+                ", location=" + location +
                 '}';
     }
 }

@@ -1,8 +1,6 @@
 package ru.samcold.controllers;
 
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -12,7 +10,7 @@ import javafx.stage.Stage;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-import ru.samcold.domain.Act;
+import ru.samcold.domain.Rtk;
 import ru.samcold.domain.Crane;
 import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.Customer;
@@ -21,25 +19,51 @@ import ru.samcold.utils.NumberPropertyBinder;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MainController {
 
     /**
      * FXML field
      */
-    //region Customer
     @FXML
-    private TitledPane pane_Customer;
-    @FXML
-    private Button btn_ExtractCrane;
+    private Button btn_LoadTemplate;
     @FXML
     private Button btn_ExtractCustomer;
     @FXML
-    private Button btn_LoadTemplate;
+    private Button btn_ExtractCrane;
+    @FXML
+    private Button btn_ExtractRTK;
+    @FXML
+    Button btn_Test;
+    //region RTK
+    @FXML
+    private TitledPane pane_RTK;
+
+    @FXML
+    private TextField txt_RTK_Number;
+
+    @FXML
+    private TextField txt_RTK_Period;
+
+    @FXML
+    private TextField txt_RTK_OrderDate;
+
+    @FXML
+    private TextField txt_RTK_OrderNumber;
+
+    @FXML
+    private TextField txt_RTK_ContractNumber;
+
+    @FXML
+    private TextField txt_RTK_ContractDate;
+
+    @FXML
+    private TextField txt_RTK_Location;
+    //endregion
+    //region Customer
+    @FXML
+    private TitledPane pane_Customer;
     @FXML
     private TextField txt_CustomerAddress;
     @FXML
@@ -80,7 +104,7 @@ public class MainController {
     private TextField txt_CraneFactory;
 
     @FXML
-    private ComboBox<Integer> cbo_CraneIssue;
+    private TextField txt_CraneIssue;
 
     @FXML
     private TextField txt_CraneSpan;
@@ -92,15 +116,12 @@ public class MainController {
     private TextField txt_CraneLifting;
     //endregion
 
-    private final ObservableList<Integer> years = FXCollections.observableArrayList(
-            IntStream.rangeClosed(1950, LocalDate.now().getYear()).boxed().collect(Collectors.toList()));
-
     private final MyDocument myDocument = MyDocument.getInstance();
     private final Extraction extraction = Extraction.getInstance();
     private final NumberPropertyBinder numberBinder = NumberPropertyBinder.getInstance();
     private final BooleanProperty isLoaded = new SimpleBooleanProperty();
 
-    private Act act;
+    private Rtk rtk;
     private Customer customer;
     private Crane crane;
     private ValidationSupport validationSupport;
@@ -108,16 +129,17 @@ public class MainController {
     @FXML
     void initialize() {
 
-        act = new Act();
+        rtk = new Rtk();
         customer = new Customer();
         crane = new Crane();
 
         validationSupport = new ValidationSupport();
         isLoaded.set(false);
+        btn_ExtractRTK.disableProperty().bind(isLoaded.not());
         btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
+        btn_ExtractCrane.disableProperty().bind(isLoaded.not());
 
-        cbo_CraneIssue.setItems(years);
-
+        initRtkFields();
         initCustomerFields();
         initCraneFields();
         initButtons();
@@ -140,11 +162,25 @@ public class MainController {
         try {
             myDocument.setTemplate(path);
             isLoaded.set(true);
-            customer.clear();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initRtkFields() {
+        // bind
+        txt_RTK_Number.textProperty().bindBidirectional(rtk.numberProperty());
+        txt_RTK_ContractNumber.textProperty().bindBidirectional(rtk.contractNumberProperty());
+        txt_RTK_ContractDate.textProperty().bindBidirectional(rtk.contractDateProperty());
+        txt_RTK_OrderNumber.textProperty().bindBidirectional(rtk.orderNumberProperty());
+        txt_RTK_OrderDate.textProperty().bindBidirectional(rtk.orderDateProperty());
+        txt_RTK_Period.textProperty().bindBidirectional(rtk.periodProperty());
+        txt_RTK_Location.textProperty().bindBidirectional(rtk.locationProperty());
+
+        // validation
+        List<Node> list = ((Pane) pane_RTK.getContent()).getChildren();
+        setValidation(list);
     }
 
     private void initCustomerFields() {
@@ -158,7 +194,7 @@ public class MainController {
         txt_CustomerPhone.textProperty().bindBidirectional(customer.phoneProperty());
 
         // validator
-        List<Node> list = ((Pane) pane_Crane.getContent()).getChildren();
+        List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
         setValidation(list);
     }
 
@@ -170,13 +206,13 @@ public class MainController {
         txt_CraneZav.textProperty().bindBidirectional(crane.zavProperty());
         txt_CraneReg.textProperty().bindBidirectional(crane.regProperty());
         txt_CraneFactory.textProperty().bindBidirectional(crane.factoryProperty());
-        cbo_CraneIssue.valueProperty().bindBidirectional(crane.issueProperty());
-        numberBinder.bind(txt_CraneCapacity, crane.capacityProperty());
-        numberBinder.bind(txt_CraneLifting, crane.liftingProperty());
-        numberBinder.bind(txt_CraneSpan, crane.spanProperty());
+        txt_CraneIssue.textProperty().bindBidirectional(crane.issueProperty());
+        txt_CraneCapacity.textProperty().bindBidirectional(crane.capacityProperty());
+        txt_CraneLifting.textProperty().bindBidirectional(crane.liftingProperty());
+        txt_CraneSpan.textProperty().bindBidirectional(crane.spanProperty());
 
         // validation
-        List<Node> list = ((Pane) pane_Customer.getContent()).getChildren();
+        List<Node> list = ((Pane) pane_Crane.getContent()).getChildren();
         setValidation(list);
     }
 
@@ -204,17 +240,24 @@ public class MainController {
         });
 
         btn_ExtractCrane.setOnAction(actionEvent -> {
-
-            act = extraction.extractAct();
-            System.out.println(act);
-
-            // test
-            crane.issueProperty().set(1960);
-            crane.capacityProperty().set(666.66);
-            crane.liftingProperty().set(123.33);
-            crane.spanProperty().set(324.45);
+            try {
+                crane = extraction.extractCrane(this.crane);
+                initCraneFields();
+                pane_Crane.setExpanded(true);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
 
             pane_Crane.setExpanded(true);
+        });
+
+        btn_ExtractRTK.setOnAction(actionEvent -> {
+            rtk = extraction.extractRtk();
+            initRtkFields();
+            pane_RTK.setExpanded(true);
+        });
+
+        btn_Test.setOnAction(actionEvent -> {
         });
     }
 
