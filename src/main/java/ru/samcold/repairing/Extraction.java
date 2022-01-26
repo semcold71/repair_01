@@ -38,21 +38,21 @@ public class Extraction {
 
         // Договор
         rtk.contractNumberProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(0).getCell(1).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(2).getRow(0).getCell(1).getParagraphs()));
         rtk.contractDateProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(2).getRow(1).getCell(1).getParagraphs()));
 
         // Приказ
         rtk.orderNumberProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(0).getCell(1).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(3).getRow(0).getCell(1).getParagraphs()));
         rtk.orderDateProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(3).getRow(1).getCell(1).getParagraphs()));
 
         // Дата и место проведения технического диагностирования
         rtk.periodProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(0).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(4).getRow(0).getCell(0).getParagraphs()));
         rtk.locationProperty().set(
-                paragraphToLine(myDocument.getTemplate().getTables().get(4).getRow(0).getCell(1).getParagraphs()));
+                paragraphToLine(myDocument.getExternalDocument().getTables().get(4).getRow(0).getCell(1).getParagraphs()));
 
         return rtk;
     }
@@ -61,7 +61,7 @@ public class Extraction {
         Class<?> cls = customer.getClass();
         Field[] fields = cls.getDeclaredFields();
 
-        List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(1).getRows();
+        List<XWPFTableRow> rows = myDocument.getExternalDocument().getTables().get(1).getRows();
         for (int i = 0; i < fields.length; i++) {
             int cellsCount = rows.get(i).getTableCells().size() - 1;
             List<XWPFParagraph> paras = rows.get(i).getCell(cellsCount).getParagraphs();
@@ -80,7 +80,7 @@ public class Extraction {
         Class<?> cls = crane.getClass();
         Field[] fields = cls.getDeclaredFields();
 
-        List<XWPFTableRow> rows = myDocument.getTemplate().getTables().get(7).getRows();
+        List<XWPFTableRow> rows = myDocument.getExternalDocument().getTables().get(7).getRows();
         for (int i = 0; i < fields.length; i++) {
             int cellsCount = rows.get(i).getTableCells().size() - 1;
             List<XWPFParagraph> paras = rows.get(i).getCell(cellsCount).getParagraphs();
@@ -100,13 +100,13 @@ public class Extraction {
         String foundText;
 
         while (true) {
-            foundText = myDocument.getTemplate().getParagraphs().get(i).getText();
+            foundText = myDocument.getExternalDocument().getParagraphs().get(i).getText();
             i++;
             if (foundText.startsWith("РТК")) {
                 foundText = foundText.replaceAll("\\D+", "");
                 break;
             }
-            if (i >= myDocument.getTemplate().getParagraphs().size()) {
+            if (i >= myDocument.getExternalDocument().getParagraphs().size()) {
                 foundText = "Не найдено";
                 break;
             }

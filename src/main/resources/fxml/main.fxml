@@ -16,10 +16,15 @@
         <HBox layoutX="14.0" layoutY="14.0" spacing="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <children>
                 <Button fx:id="btn_LoadTemplate" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Загрузить образец" />
-                <Button fx:id="btn_ExtractCustomer" mnemonicParsing="false" text="Извлечь заказчика" />
-                <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС" />
-            <Button fx:id="btn_ExtractRTK" mnemonicParsing="false" text="Извлечь РТК" />
-            <Button fx:id="btn_Test" mnemonicParsing="false" text="Test" />
+            <HBox fx:id="hbox_AnotherButtons" spacing="10.0">
+               <children>
+                      <Button fx:id="btn_ExtractCustomer" mnemonicParsing="false" text="Извлечь заказчика" />
+                      <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС" />
+                  <Button fx:id="btn_ExtractRTK" mnemonicParsing="false" text="Извлечь РТК" />
+                  <Button fx:id="btn_Save" mnemonicParsing="false" text="Сохранить" />
+                  <Button fx:id="btn_Test" mnemonicParsing="false" text="Test" />
+               </children>
+            </HBox>
             </children>
         </HBox>
         <Accordion layoutX="14.0" layoutY="84.0" prefHeight="631.0" prefWidth="972.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="58.0">

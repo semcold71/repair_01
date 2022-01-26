@@ -69,4 +69,13 @@ public class Crane {
                 ", span=" + span +
                 '}';
     }
+
+    public String getFullName() {
+        StringBuilder sb = new StringBuilder();
+        sb
+                .append(name)
+                .append(mark.get() != null ? ", " + mark : "");
+
+        return sb.toString();
+    }
 }

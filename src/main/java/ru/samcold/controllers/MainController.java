@@ -4,9 +4,11 @@ import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xwpf.usermodel.*;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
@@ -35,7 +37,11 @@ public class MainController {
     @FXML
     private Button btn_ExtractRTK;
     @FXML
-    Button btn_Test;
+    private Button btn_Save;
+    @FXML
+    private Button btn_Test;
+    @FXML
+    private HBox hbox_AnotherButtons;
     //region RTK
     @FXML
     private TitledPane pane_RTK;
@@ -133,11 +139,9 @@ public class MainController {
         customer = new Customer();
         crane = new Crane();
 
-        validationSupport = new ValidationSupport();
         isLoaded.set(false);
-        btn_ExtractRTK.disableProperty().bind(isLoaded.not());
-        btn_ExtractCustomer.disableProperty().bind(isLoaded.not());
-        btn_ExtractCrane.disableProperty().bind(isLoaded.not());
+        validationSupport = new ValidationSupport();
+        hbox_AnotherButtons.disableProperty().bind(isLoaded.not());
 
         initRtkFields();
         initCustomerFields();
@@ -145,7 +149,7 @@ public class MainController {
         initButtons();
     }
 
-    private void openTemplate() {
+    private void loadExternalDocument() {
         String path;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Выбрать документ для редактирования");
@@ -160,7 +164,7 @@ public class MainController {
         } else return;
 
         try {
-            myDocument.setTemplate(path);
+            myDocument.setExternalDocument(path);
             isLoaded.set(true);
 
         } catch (IOException e) {
@@ -168,6 +172,21 @@ public class MainController {
         }
     }
 
+    private void createOutputDocument() {
+        try {
+            myDocument.setOutputDocument();
+
+            List<XWPFParagraph> paragraphs = myDocument.getOutputDocument().getParagraphs();
+            updateParagraph(paragraphs,"craneFull", customer.nameProperty().get());
+
+            myDocument.save();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ...
     private void initRtkFields() {
         // bind
         txt_RTK_Number.textProperty().bindBidirectional(rtk.numberProperty());
@@ -227,7 +246,16 @@ public class MainController {
     }
 
     private void initButtons() {
-        btn_LoadTemplate.setOnAction(actionEvent -> openTemplate());
+
+        btn_LoadTemplate.setOnAction(actionEvent -> {
+            loadExternalDocument();
+        });
+
+        btn_ExtractRTK.setOnAction(actionEvent -> {
+            rtk = extraction.extractRtk();
+            initRtkFields();
+            pane_RTK.setExpanded(true);
+        });
 
         btn_ExtractCustomer.setOnAction(actionEvent -> {
             try {
@@ -251,14 +279,42 @@ public class MainController {
             pane_Crane.setExpanded(true);
         });
 
-        btn_ExtractRTK.setOnAction(actionEvent -> {
-            rtk = extraction.extractRtk();
-            initRtkFields();
-            pane_RTK.setExpanded(true);
+        btn_Save.setOnAction(actionEvent -> {
+            createOutputDocument();
         });
 
+
         btn_Test.setOnAction(actionEvent -> {
+            try {
+                myDocument.setOutputDocument();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         });
+    }
+
+    private static void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
+        for (XWPFParagraph paragraph : paragraphList) {
+            for (XWPFRun run : paragraph.getRuns()) {
+                if (run.getText(0) != null && run.getText(0).contains(target)) {
+                    String text = run.getText(0);
+                    text = text.replace(text, replacement);
+                    run.setText(text, 0);
+                }
+            }
+        }
+    }
+
+    private static void findInTables(XWPFDocument document, String target, String replacement) {
+        for (XWPFTable table : document.getTables()) {
+            for (XWPFTableRow row : table.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    updateParagraph(cell.getParagraphs(), target, replacement);
+                }
+            }
+        }
     }
 
 }
