@@ -73,8 +73,10 @@ public class Crane {
     public String getFullName() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(name)
-                .append(mark.get() != null ? ", " + mark : "");
+                .append(name.get())
+                .append(mark.get() != null ? " " + mark.get() : "")
+                .append(zav.get() != null ? ", зав.№ " + zav.get() : "")
+                .append(reg.get() != null ? ", рег.№ " + reg.get() : "");
 
         return sb.toString();
     }

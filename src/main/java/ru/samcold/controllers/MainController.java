@@ -177,7 +177,11 @@ public class MainController {
             myDocument.setOutputDocument();
 
             List<XWPFParagraph> paragraphs = myDocument.getOutputDocument().getParagraphs();
-            updateParagraph(paragraphs,"craneFull", customer.nameProperty().get());
+
+            updateParagraph(paragraphs,"rtk", rtk.numberProperty().get());
+            updateParagraph(paragraphs,"craneFull", crane.getFullName());
+
+            findInTables(myDocument.getOutputDocument(), "customerName", customer.nameProperty().get());
 
             myDocument.save();
 
@@ -231,8 +235,12 @@ public class MainController {
         txt_CraneSpan.textProperty().bindBidirectional(crane.spanProperty());
 
         // validation
-        List<Node> list = ((Pane) pane_Crane.getContent()).getChildren();
-        setValidation(list);
+        Validator<String> emptyValidator = Validator.createEmptyValidator("Необходимо заполнить",Severity.ERROR);
+        validationSupport.registerValidator(txt_CraneName,emptyValidator);
+        validationSupport.registerValidator(txt_CraneFactory,emptyValidator);
+        validationSupport.registerValidator(txt_CraneIssue,emptyValidator);
+        validationSupport.registerValidator(txt_CraneCapacity,emptyValidator);
+        validationSupport.registerValidator(txt_CraneLifting,emptyValidator);
     }
 
     private void setValidation(List<Node> nodeList) {
