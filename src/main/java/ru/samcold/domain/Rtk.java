@@ -10,6 +10,7 @@ public class Rtk {
     private final StringProperty orderDate = new SimpleStringProperty();
     private final StringProperty period = new SimpleStringProperty();
     private final StringProperty location = new SimpleStringProperty();
+    private final StringProperty next = new SimpleStringProperty();
 
     public StringProperty numberProperty() {
         return number;
@@ -39,6 +40,10 @@ public class Rtk {
         return location;
     }
 
+    public StringProperty nextProperty() {
+        return next;
+    }
+
     @Override
     public String toString() {
         return "Rtk{" +
@@ -49,6 +54,7 @@ public class Rtk {
                 ", orderDate=" + orderDate +
                 ", period=" + period +
                 ", location=" + location +
+                ", next=" + next +
                 '}';
     }
 }

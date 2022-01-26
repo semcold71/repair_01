@@ -2,6 +2,8 @@ package ru.samcold.domain;
 
 import javafx.beans.property.*;
 
+import java.util.Objects;
+
 public class Crane {
     private final StringProperty name = new SimpleStringProperty();     // наименование, тип
     private final StringProperty mark = new SimpleStringProperty();     // марка
@@ -74,9 +76,9 @@ public class Crane {
         StringBuilder sb = new StringBuilder();
         sb
                 .append(name.get())
-                .append(mark.get() != null ? " " + mark.get() : "")
-                .append(zav.get() != null ? ", зав.№ " + zav.get() : "")
-                .append(reg.get() != null ? ", рег.№ " + reg.get() : "");
+                .append(mark.get() != null && !Objects.equals(mark.get(), "") ? " " + mark.get() : "")
+                .append(zav.get() != null && !Objects.equals(zav.get(), "") ? ", зав.№ " + zav.get() : "")
+                .append(reg.get() != null && !Objects.equals(reg.get(), "") ? ", рег.№ " + reg.get() : "");
 
         return sb.toString();
     }

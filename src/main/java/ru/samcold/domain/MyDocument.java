@@ -44,7 +44,9 @@ public class MyDocument {
     public void save() throws IOException {
         try (FileOutputStream fos = new FileOutputStream("output.docx")) {
             outputDocument.write(fos);
+            System.out.println("Save succeeded.");
         } catch (IOException e) {
+            System.out.println("Save failed!");
             e.printStackTrace();
         }
     }

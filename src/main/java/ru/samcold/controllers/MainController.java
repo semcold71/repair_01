@@ -178,10 +178,37 @@ public class MainController {
 
             List<XWPFParagraph> paragraphs = myDocument.getOutputDocument().getParagraphs();
 
-            updateParagraph(paragraphs,"rtk", rtk.numberProperty().get());
-            updateParagraph(paragraphs,"craneFull", crane.getFullName());
+            updateParagraph(paragraphs, "rtk", rtk.numberProperty().get());
+            updateParagraph(paragraphs, "craneFull", crane.getFullName());
 
-            findInTables(myDocument.getOutputDocument(), "customerName", customer.nameProperty().get());
+            findInCurrentTable(0, "customerName", customer.nameProperty().get());
+            findInCurrentTable(0, "customerZip", customer.zipProperty().get());
+            findInCurrentTable(0, "customerRegion", customer.regionProperty().get());
+            findInCurrentTable(0, "customerCity", customer.cityProperty().get());
+            findInCurrentTable(0, "customerAddress", customer.addressProperty().get());
+            findInCurrentTable(0, "customerBoss", customer.bossProperty().get());
+            findInCurrentTable(0, "customerPost", customer.postProperty().get());
+            findInCurrentTable(0, "customerPhone", customer.phoneProperty().get());
+
+            findInCurrentTable(1, "contractNumber", rtk.contractNumberProperty().get());
+            findInCurrentTable(1, "contractDate", rtk.contractDateProperty().get());
+
+            findInCurrentTable(2, "orderNumber", rtk.orderNumberProperty().get());
+            findInCurrentTable(2, "orderDate", rtk.orderDateProperty().get());
+
+            findInCurrentTable(3, "location", rtk.locationProperty().get());
+            findInCurrentTable(3, "period", rtk.periodProperty().get());
+
+            findInCurrentTable(6, "craneName", crane.nameProperty().get());
+            findInCurrentTable(6, "craneMarka", crane.markProperty().get());
+            findInCurrentTable(6, "craneMode", crane.modeProperty().get());
+            findInCurrentTable(6, "craneZav", crane.zavProperty().get());
+            findInCurrentTable(6, "craneReg", crane.regProperty().get());
+            findInCurrentTable(6, "craneFactory", crane.factoryProperty().get());
+            findInCurrentTable(6, "craneIssue", crane.issueProperty().get());
+            findInCurrentTable(6, "craneCapacity", crane.capacityProperty().get());
+            findInCurrentTable(6, "craneLifting", crane.liftingProperty().get());
+            findInCurrentTable(6, "craneSpan", crane.spanProperty().get());
 
             myDocument.save();
 
@@ -235,12 +262,12 @@ public class MainController {
         txt_CraneSpan.textProperty().bindBidirectional(crane.spanProperty());
 
         // validation
-        Validator<String> emptyValidator = Validator.createEmptyValidator("Необходимо заполнить",Severity.ERROR);
-        validationSupport.registerValidator(txt_CraneName,emptyValidator);
-        validationSupport.registerValidator(txt_CraneFactory,emptyValidator);
-        validationSupport.registerValidator(txt_CraneIssue,emptyValidator);
-        validationSupport.registerValidator(txt_CraneCapacity,emptyValidator);
-        validationSupport.registerValidator(txt_CraneLifting,emptyValidator);
+        Validator<String> emptyValidator = Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR);
+        validationSupport.registerValidator(txt_CraneName, emptyValidator);
+        validationSupport.registerValidator(txt_CraneFactory, emptyValidator);
+        validationSupport.registerValidator(txt_CraneIssue, emptyValidator);
+        validationSupport.registerValidator(txt_CraneCapacity, emptyValidator);
+        validationSupport.registerValidator(txt_CraneLifting, emptyValidator);
     }
 
     private void setValidation(List<Node> nodeList) {
@@ -303,7 +330,7 @@ public class MainController {
         });
     }
 
-    private static void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
+    private void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
         for (XWPFParagraph paragraph : paragraphList) {
             for (XWPFRun run : paragraph.getRuns()) {
                 if (run.getText(0) != null && run.getText(0).contains(target)) {
@@ -315,12 +342,20 @@ public class MainController {
         }
     }
 
-    private static void findInTables(XWPFDocument document, String target, String replacement) {
+    private void findInTables(XWPFDocument document, String target, String replacement) {
         for (XWPFTable table : document.getTables()) {
             for (XWPFTableRow row : table.getRows()) {
                 for (XWPFTableCell cell : row.getTableCells()) {
                     updateParagraph(cell.getParagraphs(), target, replacement);
                 }
+            }
+        }
+    }
+
+    private void findInCurrentTable(int tableIndex, String target, String replacement) {
+        for (XWPFTableRow row : myDocument.getOutputDocument().getTables().get(tableIndex).getRows()) {
+            for (XWPFTableCell cell : row.getTableCells()) {
+                updateParagraph(cell.getParagraphs(), target, replacement);
             }
         }
     }

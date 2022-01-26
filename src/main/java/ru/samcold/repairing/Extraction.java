@@ -10,7 +10,12 @@ import ru.samcold.domain.Customer;
 import ru.samcold.domain.MyDocument;
 
 import java.lang.reflect.Field;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 public class Extraction {
     // region singleton
@@ -53,6 +58,27 @@ public class Extraction {
                 paragraphToLine(myDocument.getExternalDocument().getTables().get(4).getRow(0).getCell(0).getParagraphs()));
         rtk.locationProperty().set(
                 paragraphToLine(myDocument.getExternalDocument().getTables().get(4).getRow(0).getCell(1).getParagraphs()));
+
+        // Дата следующего ТД
+        Map<Integer, String> rusMonths = new HashMap<>();
+        rusMonths.put(1, "Январь");
+        rusMonths.put(2, "Февраль");
+        rusMonths.put(3, "Март");
+        rusMonths.put(4, "Апрель");
+        rusMonths.put(5, "Май");
+        rusMonths.put(6, "Июнь");
+        rusMonths.put(7, "Июль");
+        rusMonths.put(8, "Август");
+        rusMonths.put(9, "Сентябрь");
+        rusMonths.put(10, "Октябрь");
+        rusMonths.put(11, "Ноябрь");
+        rusMonths.put(12, "Декабрь");
+
+        int month = LocalDate.now().getMonthValue();
+        int year = LocalDate.now().getYear() + 2;
+
+        String nextDateStr = rusMonths.get(month) + " " + year;
+        rtk.nextProperty().set(nextDateStr);
 
         return rtk;
     }
