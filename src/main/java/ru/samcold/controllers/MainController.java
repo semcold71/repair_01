@@ -10,10 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.*;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import ru.samcold.domain.Rtk;
 import ru.samcold.domain.Crane;
 import ru.samcold.domain.MyDocument;
@@ -25,6 +28,7 @@ import ru.samcold.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class MainController {
 
@@ -247,6 +251,12 @@ public class MainController {
             findInCurrentTable(53, "contractNumber", rtk.contractNumberProperty().get());
             findInCurrentTable(53, "contractDate", rtk.contractDateProperty().get());
 
+            // только rtk (колонтитул в первом разделе - не удалось)
+            XWPFHeaderFooterPolicy headerFooterPolicy = myDocument.getOutputDocument().getHeaderFooterPolicy();
+            XWPFHeader header = headerFooterPolicy.getDefaultHeader();
+            XWPFParagraph hParagraph = header.getParagraphs().get(0);
+            updateCurrentParagraph(hParagraph, "rtk", rtk.numberProperty().get());
+
             myDocument.save();
 
         } catch (IOException e) {
@@ -388,8 +398,8 @@ public class MainController {
 
     private void updateCurrentParagraph(XWPFParagraph para, String target, String replacement) {
         for (XWPFRun run : para.getRuns()) {
-            String text = run.getText(0);
-            if (text.equals(target)) {
+            if (run.getText(0) != null && run.getText(0).equals(target)) {
+                String text = run.getText(0);
                 text = text.replace(text, replacement);
                 run.setText(text, 0);
             }
@@ -416,11 +426,11 @@ public class MainController {
 
     private void fillHeaderTable(int tableNum) {
         XWPFTable table = myDocument.getOutputDocument().getTables().get(tableNum);
-        table.getRows().get(0).getCell(1).getParagraphs().get(0).createRun().setText(crane.nameProperty().get(),0);
-        table.getRows().get(1).getCell(1).getParagraphs().get(0).createRun().setText(crane.markProperty().get(),0);
-        table.getRows().get(2).getCell(1).getParagraphs().get(0).createRun().setText(crane.zavProperty().get(),0);
-        table.getRows().get(3).getCell(1).getParagraphs().get(0).createRun().setText(crane.regProperty().get(),0);
-        table.getRows().get(4).getCell(1).getParagraphs().get(0).createRun().setText(customer.nameProperty().get(),0);
+        table.getRows().get(0).getCell(1).getParagraphs().get(0).createRun().setText(crane.nameProperty().get(), 0);
+        table.getRows().get(1).getCell(1).getParagraphs().get(0).createRun().setText(crane.markProperty().get(), 0);
+        table.getRows().get(2).getCell(1).getParagraphs().get(0).createRun().setText(crane.zavProperty().get(), 0);
+        table.getRows().get(3).getCell(1).getParagraphs().get(0).createRun().setText(crane.regProperty().get(), 0);
+        table.getRows().get(4).getCell(1).getParagraphs().get(0).createRun().setText(customer.nameProperty().get(), 0);
     }
 
 }

@@ -11,7 +11,7 @@ public class Crane {
     private final StringProperty zav = new SimpleStringProperty();      // зав.№
     private final StringProperty reg = new SimpleStringProperty();      // рег.№
     private final StringProperty factory = new SimpleStringProperty();  // завод-изготовитель
-    private final StringProperty issue = new SimpleStringProperty();  // год выпуска
+    private final StringProperty issue = new SimpleStringProperty();    // год выпуска
     private final StringProperty capacity = new SimpleStringProperty(); // грузоподъемность
     private final StringProperty lifting = new SimpleStringProperty();  // высота подъема
     private final StringProperty span = new SimpleStringProperty();     // пролет (вылет)
