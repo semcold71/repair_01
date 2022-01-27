@@ -66,6 +66,9 @@ public class MainController {
 
     @FXML
     private TextField txt_RTK_Location;
+
+    @FXML
+    private TextField txt_RTK_Next;
     //endregion
     //region Customer
     @FXML
@@ -210,6 +213,20 @@ public class MainController {
             findInCurrentTable(6, "craneLifting", crane.liftingProperty().get());
             findInCurrentTable(6, "craneSpan", crane.spanProperty().get());
 
+            XWPFParagraph nextDatePara1 = myDocument.getOutputDocument().getTables().get(23).getRows().get(0).getCell(0).getParagraphs().get(0);
+            updateCurrentParagraph(nextDatePara1, "craneFull", crane.getFullName());
+
+            XWPFParagraph nextDatePara2 = myDocument.getOutputDocument().getTables().get(23).getRows().get(1).getCell(1).getParagraphs().get(0);
+            updateCurrentParagraph(nextDatePara2, "rtkNext", rtk.nextProperty().get() + " г.");
+
+            fillHeaderTable(30);
+            fillHeaderTable(32);
+            fillHeaderTable(33);
+            fillHeaderTable(36);
+
+            findInCurrentTable(53, "contractNumber", rtk.contractNumberProperty().get());
+            findInCurrentTable(53, "contractDate", rtk.contractDateProperty().get());
+
             myDocument.save();
 
         } catch (IOException e) {
@@ -227,6 +244,7 @@ public class MainController {
         txt_RTK_OrderDate.textProperty().bindBidirectional(rtk.orderDateProperty());
         txt_RTK_Period.textProperty().bindBidirectional(rtk.periodProperty());
         txt_RTK_Location.textProperty().bindBidirectional(rtk.locationProperty());
+        txt_RTK_Next.textProperty().bindBidirectional(rtk.nextProperty());
 
         // validation
         List<Node> list = ((Pane) pane_RTK.getContent()).getChildren();
@@ -342,6 +360,16 @@ public class MainController {
         }
     }
 
+    private void updateCurrentParagraph(XWPFParagraph para, String target, String replacement) {
+        for (XWPFRun run : para.getRuns()) {
+            String text = run.getText(0);
+            if (text.equals(target)) {
+                text = text.replace(text, replacement);
+                run.setText(text, 0);
+            }
+        }
+    }
+
     private void findInTables(XWPFDocument document, String target, String replacement) {
         for (XWPFTable table : document.getTables()) {
             for (XWPFTableRow row : table.getRows()) {
@@ -358,6 +386,15 @@ public class MainController {
                 updateParagraph(cell.getParagraphs(), target, replacement);
             }
         }
+    }
+
+    private void fillHeaderTable(int tableNum) {
+        XWPFTable table = myDocument.getOutputDocument().getTables().get(tableNum);
+        table.getRows().get(0).getCell(1).getParagraphs().get(0).createRun().setText(crane.nameProperty().get(),0);
+        table.getRows().get(1).getCell(1).getParagraphs().get(0).createRun().setText(crane.markProperty().get(),0);
+        table.getRows().get(2).getCell(1).getParagraphs().get(0).createRun().setText(crane.zavProperty().get(),0);
+        table.getRows().get(3).getCell(1).getParagraphs().get(0).createRun().setText(crane.regProperty().get(),0);
+        table.getRows().get(4).getCell(1).getParagraphs().get(0).createRun().setText(customer.nameProperty().get(),0);
     }
 
 }

@@ -14,12 +14,25 @@
         <maven.compiler.target>17</maven.compiler.target>
 <!--        <javafx.version>17-ea+11</javafx.version>-->
         <javafx.version>11.0.2</javafx.version>
-
         <poi.version>4.1.2</poi.version>
 <!--        <poi.version>5.2.0</poi.version>-->
     </properties>
 
+    <repositories>
+        <repository>
+            <id>lib</id>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <!--Padeg-->
+        <dependency>
+            <groupId>padeg</groupId>
+            <artifactId>padeg</artifactId>
+            <version>3.3.0.24</version>
+        </dependency>
+
         <!--JavaFX-->
         <dependency>
             <groupId>org.openjfx</groupId>
