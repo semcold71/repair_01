@@ -1,7 +1,9 @@
 package ru.samcold;
 
 import org.apache.poi.xwpf.usermodel.*;
+import padeg.lib.Padeg;
 import ru.samcold.domain.MyDocument;
+import ru.samcold.utils.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,23 +14,28 @@ import java.util.List;
 public class Tst {
 
     public static void main(String[] args) {
-        tst();
+        StringUtils stringUtils = StringUtils.getInstance();
+
+        String inputStr = "Кран-погрузчик портальный КБ-586П-11, зав.№ 008";
+
+        System.out.println(stringUtils.firstToLower(stringUtils.strToRod(inputStr)));
+
+
     }
 
-    private static void tst() {
 
-        XWPFDocument doc = null;
 
-        try {
-            doc = new XWPFDocument(Main.class.getResourceAsStream("/docx/blank.docx"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try (FileOutputStream fos = new FileOutputStream("output.docx")) {
-            doc.write(fos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    String result = "";
+//    result += work;
+//        if (!crane.isEmpty()) {
+//        String[] arr = crane.split(" ");
+//        StringBuilder craneOut = new StringBuilder();
+//        for (String c : arr) {
+//            c = Padeg.getAppointmentPadeg(c, 2);
+//            craneOut.append(c).append(" ");
+//        }
+//        result += " " + firstToLower(craneOut.toString()).trim();
+//    }
+//        return result;
 }

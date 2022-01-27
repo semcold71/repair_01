@@ -18,6 +18,7 @@ import ru.samcold.domain.MyDocument;
 import ru.samcold.domain.Customer;
 import ru.samcold.repairing.Extraction;
 import ru.samcold.utils.NumberPropertyBinder;
+import ru.samcold.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,6 +129,7 @@ public class MainController {
     private final MyDocument myDocument = MyDocument.getInstance();
     private final Extraction extraction = Extraction.getInstance();
     private final NumberPropertyBinder numberBinder = NumberPropertyBinder.getInstance();
+    private final StringUtils stringUtils = StringUtils.getInstance();
     private final BooleanProperty isLoaded = new SimpleBooleanProperty();
 
     private Rtk rtk;
@@ -183,6 +185,8 @@ public class MainController {
 
             updateParagraph(paragraphs, "rtk", rtk.numberProperty().get());
             updateParagraph(paragraphs, "craneFull", crane.getFullName());
+            updateParagraph(paragraphs, "craneFullRod",
+                    stringUtils.firstToLower(stringUtils.strToRod(crane.getFullName())));
 
             findInCurrentTable(0, "customerName", customer.nameProperty().get());
             findInCurrentTable(0, "customerZip", customer.zipProperty().get());
@@ -351,7 +355,7 @@ public class MainController {
     private void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
         for (XWPFParagraph paragraph : paragraphList) {
             for (XWPFRun run : paragraph.getRuns()) {
-                if (run.getText(0) != null && run.getText(0).contains(target)) {
+                if (run.getText(0) != null && run.getText(0).equals(target)) {
                     String text = run.getText(0);
                     text = text.replace(text, replacement);
                     run.setText(text, 0);
