@@ -1,6 +1,8 @@
 package ru.samcold.controllers;
 
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -187,6 +189,10 @@ public class MainController {
             updateParagraph(paragraphs, "craneFull", crane.getFullName());
             updateParagraph(paragraphs, "craneFullRod",
                     stringUtils.firstToLower(stringUtils.strToRod(crane.getFullName())));
+            updateParagraph(paragraphs, "contractNumber", rtk.contractNumberProperty().get());
+            updateParagraph(paragraphs, "contractDate", rtk.contractDateProperty().get() + " г.");
+            updateParagraph(paragraphs, "customer", customer.nameProperty().get());
+            updateParagraph(paragraphs, "orderNumber", rtk.orderNumberProperty().get());
 
             findInCurrentTable(0, "customerName", customer.nameProperty().get());
             findInCurrentTable(0, "customerZip", customer.zipProperty().get());
@@ -216,12 +222,22 @@ public class MainController {
             findInCurrentTable(6, "craneCapacity", crane.capacityProperty().get());
             findInCurrentTable(6, "craneLifting", crane.liftingProperty().get());
             findInCurrentTable(6, "craneSpan", crane.spanProperty().get());
+            findInCurrentTable(28, "orderDate", rtk.orderDateProperty().get());
 
             XWPFParagraph nextDatePara1 = myDocument.getOutputDocument().getTables().get(23).getRows().get(0).getCell(0).getParagraphs().get(0);
             updateCurrentParagraph(nextDatePara1, "craneFull", crane.getFullName());
 
             XWPFParagraph nextDatePara2 = myDocument.getOutputDocument().getTables().get(23).getRows().get(1).getCell(1).getParagraphs().get(0);
             updateCurrentParagraph(nextDatePara2, "rtkNext", rtk.nextProperty().get() + " г.");
+
+            myDocument.getOutputDocument().getTables().get(29).getRow(0).getCell(1).getParagraphs().get(0)
+                    .createRun().setText(crane.nameProperty().get());
+            myDocument.getOutputDocument().getTables().get(29).getRow(1).getCell(1).getParagraphs().get(0)
+                    .createRun().setText(crane.markProperty().get());
+            myDocument.getOutputDocument().getTables().get(29).getRow(2).getCell(1).getParagraphs().get(0)
+                    .createRun().setText(crane.zavProperty().get());
+            myDocument.getOutputDocument().getTables().get(29).getRow(3).getCell(1).getParagraphs().get(0)
+                    .createRun().setText(crane.regProperty().get());
 
             fillHeaderTable(30);
             fillHeaderTable(32);
@@ -240,6 +256,16 @@ public class MainController {
 
     // ...
     private void initRtkFields() {
+
+        ChangeListener<String> listener = (((observableValue, s, t1) -> {
+            String s1 = rtk.contractNumberProperty().get() == null ? "" : rtk.contractNumberProperty().get();
+            String s2 = rtk.numberProperty().get() == null ? "" : rtk.numberProperty().get();
+            rtk.orderNumberProperty().set(s1 + "/" + s2);
+        }));
+
+        rtk.numberProperty().addListener(listener);
+        rtk.contractNumberProperty().addListener(listener);
+
         // bind
         txt_RTK_Number.textProperty().bindBidirectional(rtk.numberProperty());
         txt_RTK_ContractNumber.textProperty().bindBidirectional(rtk.contractNumberProperty());
@@ -342,16 +368,12 @@ public class MainController {
 
 
         btn_Test.setOnAction(actionEvent -> {
-            try {
-                myDocument.setOutputDocument();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            rtk.numberProperty().set("888");
 
         });
     }
 
+    // ...
     private void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
         for (XWPFParagraph paragraph : paragraphList) {
             for (XWPFRun run : paragraph.getRuns()) {
