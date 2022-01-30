@@ -17,10 +17,7 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
-import ru.samcold.domain.Rtk;
-import ru.samcold.domain.Crane;
-import ru.samcold.domain.MyDocument;
-import ru.samcold.domain.Customer;
+import ru.samcold.domain.*;
 import ru.samcold.repairing.Extraction;
 import ru.samcold.utils.NumberPropertyBinder;
 import ru.samcold.utils.StringUtils;
@@ -46,11 +43,12 @@ public class MainController {
     @FXML
     private Button btn_Save;
     @FXML
+    private Button btn_Conclusion;
+
+    @FXML
     private Button btn_Test;
     @FXML
     private HBox hbox_AnotherButtons;
-    @FXML
-    private Button btn_Conclusion;
     //region RTK
     @FXML
     private TitledPane pane_RTK;
@@ -133,6 +131,24 @@ public class MainController {
     @FXML
     private TextField txt_CraneLifting;
     //endregion
+    //region Conclusion
+    @FXML
+    private DatePicker dp_Con_SignDate;
+    @FXML
+    private TextField txt_Con_Tu;
+    @FXML
+    private TextField txt_Con_ContractNumber;
+    @FXML
+    private DatePicker dp_Con_ContractDate;
+    @FXML
+    private TextField txt_Con_OrderNumber;
+    @FXML
+    private DatePicker dp_Con_OrderDate;
+    @FXML
+    private DatePicker dp_Con_NextDate;
+    @FXML
+    private Button btn_Save_Conclusion;
+    //endregion
 
     private final MyDocument myDocument = MyDocument.getInstance();
     private final Extraction extraction = Extraction.getInstance();
@@ -143,7 +159,10 @@ public class MainController {
     private Rtk rtk;
     private Customer customer;
     private Crane crane;
+    private Conclusion conclusion;
     private ValidationSupport validationSupport;
+    private ValidationSupport validationSupport1;
+    private Validator<String> emptyValidator;
 
     @FXML
     void initialize() {
@@ -151,14 +170,18 @@ public class MainController {
         rtk = new Rtk();
         customer = new Customer();
         crane = new Crane();
+        conclusion = new Conclusion(rtk);
 
         isLoaded.set(false);
         validationSupport = new ValidationSupport();
+        validationSupport1 = new ValidationSupport();
+        emptyValidator = Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR);
         hbox_AnotherButtons.disableProperty().bind(isLoaded.not());
 
         initRtkFields();
         initCustomerFields();
         initCraneFields();
+        initConclusionField();
         initButtons();
     }
 
@@ -322,12 +345,33 @@ public class MainController {
         txt_CraneSpan.textProperty().bindBidirectional(crane.spanProperty());
 
         // validation
-        Validator<String> emptyValidator = Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR);
         validationSupport.registerValidator(txt_CraneName, emptyValidator);
         validationSupport.registerValidator(txt_CraneFactory, emptyValidator);
         validationSupport.registerValidator(txt_CraneIssue, emptyValidator);
         validationSupport.registerValidator(txt_CraneCapacity, emptyValidator);
         validationSupport.registerValidator(txt_CraneLifting, emptyValidator);
+    }
+
+    private void initConclusionField() {
+        // bind
+        txt_Con_Tu.textProperty().bindBidirectional(conclusion.tuProperty());
+        dp_Con_SignDate.valueProperty().bindBidirectional(conclusion.signingDateProperty());
+        dp_Con_NextDate.valueProperty().bindBidirectional(conclusion.nextDateProperty());
+        txt_Con_ContractNumber.textProperty().bindBidirectional(conclusion.contractNumberProperty());
+        dp_Con_ContractDate.valueProperty().bindBidirectional(conclusion.contractDateProperty());
+        txt_Con_OrderNumber.textProperty().bindBidirectional(conclusion.orderNumberProperty());
+        dp_Con_OrderDate.valueProperty().bindBidirectional(conclusion.orderDateProperty());
+
+        // validation
+        validationSupport1.registerValidator(txt_Con_Tu, emptyValidator);
+        validationSupport1.registerValidator(dp_Con_SignDate, emptyValidator);
+        validationSupport1.registerValidator(dp_Con_NextDate, emptyValidator);
+        validationSupport1.registerValidator(txt_Con_ContractNumber, emptyValidator);
+        validationSupport1.registerValidator(dp_Con_ContractDate, emptyValidator);
+        validationSupport1.registerValidator(txt_Con_OrderNumber, emptyValidator);
+        validationSupport1.registerValidator(dp_Con_OrderDate, emptyValidator);
+
+        btn_Save_Conclusion.disableProperty().bind(validationSupport1.invalidProperty());
     }
 
     private void setValidation(List<Node> nodeList) {
