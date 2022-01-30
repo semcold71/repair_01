@@ -49,6 +49,8 @@ public class MainController {
     private Button btn_Test;
     @FXML
     private HBox hbox_AnotherButtons;
+    @FXML
+    private Button btn_Conclusion;
     //region RTK
     @FXML
     private TitledPane pane_RTK;
@@ -340,9 +342,7 @@ public class MainController {
 
     private void initButtons() {
 
-        btn_LoadTemplate.setOnAction(actionEvent -> {
-            loadExternalDocument();
-        });
+        btn_LoadTemplate.setOnAction(actionEvent -> loadExternalDocument());
 
         btn_ExtractRTK.setOnAction(actionEvent -> {
             rtk = extraction.extractRtk();
@@ -376,10 +376,11 @@ public class MainController {
             createOutputDocument();
         });
 
+        btn_Save.disableProperty().bind(validationSupport.invalidProperty());
+
 
         btn_Test.setOnAction(actionEvent -> {
             rtk.numberProperty().set("888");
-
         });
     }
 

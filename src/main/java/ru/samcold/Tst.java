@@ -11,29 +11,56 @@ public class Tst {
 
     public static void main(String[] args) throws IOException {
 
-        XWPFDocument document = new XWPFDocument();
+        XWPFDocument document = new XWPFDocument(Main.class.getResourceAsStream("/docx/blank1.docx"));
 
-        // create header-footer
         XWPFHeaderFooterPolicy headerFooterPolicy = document.getHeaderFooterPolicy();
-        if (headerFooterPolicy == null) headerFooterPolicy = document.createHeaderFooterPolicy();
+
+        XWPFHeader header = headerFooterPolicy.getFirstPageHeader();
+        XWPFFooter footer = headerFooterPolicy.getDefaultFooter();
+
+        XWPFParagraph hPara = header.getParagraphs().get(0);
+        XWPFParagraph fPara = footer.getParagraphs().get(0);
+
+        XWPFTable table = fPara.getBody().getTableArray(0);
+
+        XWPFRun craneRun = table.getRow(0).getCell(0).getParagraphs().get(0).getRuns().get(0);
+        String craneStr = craneRun.getText(0);
+        craneStr = craneStr.replace("crane", "new crane");
+        craneRun.setText(craneStr,0);
+
+        XWPFParagraph tuPara = table.getRow(0).getCell(1).getParagraphs().get(0);
+        for (XWPFRun tuRun : tuPara.getRuns()) {
+            if (tuRun.getText(0) != null && !tuRun.getText(0).isEmpty()) {
+                String tuStr = tuRun.getText(0);
+                if (tuStr.equals("TU")) {
+                    tuStr = tuStr.replace(tuStr, "new TU");
+                    tuRun.setText(tuStr, 0);
+                }
+            }
+        }
+
+        FileOutputStream fos = new FileOutputStream("output.docx");
+        document.write(fos);
+        fos.close();
+
 
         // create header start
-        XWPFHeader header = headerFooterPolicy.createHeader(XWPFHeaderFooterPolicy.DEFAULT);
-
-        XWPFParagraph paragraph = header.createParagraph();
-        paragraph.setAlignment(ParagraphAlignment.CENTER);
-
-        XWPFRun run = paragraph.createRun();
-        run.setText("Header");
-
-        // create footer start
-        XWPFFooter footer = headerFooterPolicy.createFooter(XWPFHeaderFooterPolicy.DEFAULT);
-
-        paragraph = footer.createParagraph();
-        paragraph.setAlignment(ParagraphAlignment.CENTER);
-
-        run = paragraph.createRun();
-        run.setText("Footer");
+//        XWPFHeader header = headerFooterPolicy.createHeader(XWPFHeaderFooterPolicy.DEFAULT);
+//
+//        XWPFParagraph paragraph = header.createParagraph();
+//        paragraph.setAlignment(ParagraphAlignment.CENTER);
+//
+//        XWPFRun run = paragraph.createRun();
+//        run.setText("Header");
+//
+//        // create footer start
+//        XWPFFooter footer = headerFooterPolicy.createFooter(XWPFHeaderFooterPolicy.DEFAULT);
+//
+//        paragraph = footer.createParagraph();
+//        paragraph.setAlignment(ParagraphAlignment.CENTER);
+//
+//        run = paragraph.createRun();
+//        run.setText("Footer");
 
 //        CTSectPr sectPr = document.getDocument().getBody().getSectPr();
 //        if (sectPr == null) sectPr = document.getDocument().getBody().addNewSectPr();

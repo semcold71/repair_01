@@ -22,6 +22,7 @@
                       <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС" />
                   <Button fx:id="btn_ExtractRTK" mnemonicParsing="false" text="Извлечь РТК" />
                   <Button fx:id="btn_Save" mnemonicParsing="false" text="Сохранить" />
+                  <Button fx:id="btn_Conclusion" mnemonicParsing="false" text="ЗЭПБ" />
                   <Button fx:id="btn_Test" mnemonicParsing="false" text="Test" />
                </children>
             </HBox>
