@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 public class Conclusion {
 
-    private final ObjectProperty<Rtk> rtk = new SimpleObjectProperty<>();
     private final StringProperty tu = new SimpleStringProperty();
     private final ObjectProperty<LocalDate> signingDate = new SimpleObjectProperty<>();
     private final StringProperty contractNumber = new SimpleStringProperty();
@@ -17,14 +16,7 @@ public class Conclusion {
     private final StringProperty orderNumber = new SimpleStringProperty();
     private final ObjectProperty<LocalDate> orderDate = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalDate> nextDate = new SimpleObjectProperty<>();
-
-    public Conclusion(Rtk rtk) {
-        this.rtk.set(rtk);
-    }
-
-    public ObjectProperty<Rtk> rtkProperty() {
-        return rtk;
-    }
+    private final StringProperty customerFull = new SimpleStringProperty();
 
     public StringProperty tuProperty() {
         return tu;
@@ -52,5 +44,22 @@ public class Conclusion {
 
     public ObjectProperty<LocalDate> nextDateProperty() {
         return nextDate;
+    }
+
+    public StringProperty customerFullProperty() {
+        return customerFull;
+    }
+
+    @Override
+    public String toString() {
+        return "Conclusion{" +
+                "tu=" + tu +
+                ", signingDate=" + signingDate +
+                ", contractNumber=" + contractNumber +
+                ", contractDate=" + contractDate +
+                ", orderNumber=" + orderNumber +
+                ", orderDate=" + orderDate +
+                ", nextDate=" + nextDate +
+                '}';
     }
 }

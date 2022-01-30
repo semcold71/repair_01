@@ -24,7 +24,7 @@
                       <Button fx:id="btn_ExtractCrane" mnemonicParsing="false" text="Извлечь ПС" />
                   <Button fx:id="btn_ExtractRTK" mnemonicParsing="false" text="Извлечь РТК" />
                   <Button fx:id="btn_Save" mnemonicParsing="false" text="Сохранить" />
-                  <Button fx:id="btn_Conclusion" mnemonicParsing="false" text="ЗЭПБ" />
+                  <Button fx:id="btn_createConclusion" mnemonicParsing="false" text="ЗЭПБ" />
                   <Button fx:id="btn_Test" mnemonicParsing="false" text="Test" />
                </children>
             </HBox>
@@ -186,7 +186,7 @@
                         </AnchorPane>
                     </content>
                 </TitledPane>
-            <TitledPane expanded="false" text="ЗЭПБ">
+            <TitledPane fx:id="pane_Conclusion" disable="true" expanded="false" text="ЗЭПБ">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -210,6 +210,8 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label text="Номер ТУ" />
@@ -218,16 +220,18 @@
                               <Label text="номер" GridPane.rowIndex="5" />
                               <Label style="-fx-text-fill: grey; -fx-underline: true;" text="Договор" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
                               <Label text="Дата подписания" GridPane.rowIndex="1" />
-                              <DatePicker fx:id="dp_Con_SignDate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <DatePicker fx:id="dp_Con_SignDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="txt_Con_Tu" GridPane.columnIndex="1" />
                               <TextField fx:id="txt_Con_ContractNumber" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <DatePicker fx:id="dp_Con_ContractDate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <TextField fx:id="txt_Con_OrderNumber" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                              <DatePicker fx:id="dp_Con_OrderDate" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <DatePicker fx:id="dp_Con_ContractDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <TextField fx:id="txt_Con_CustomerFull" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="12" />
+                              <DatePicker fx:id="dp_Con_OrderDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                               <Label text="номер" GridPane.rowIndex="9" />
                               <Label text="дата" GridPane.rowIndex="10" />
                               <Label text="Дата следующей ЭПБ" GridPane.rowIndex="2" />
-                              <DatePicker fx:id="dp_Con_NextDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <DatePicker fx:id="dp_Con_NextDate" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Заказчик" GridPane.rowIndex="12" />
+                              <TextField fx:id="txt_Con_OrderNumber" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                            </children>
                         </GridPane>
                         <ButtonBar layoutX="98.0" layoutY="473.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

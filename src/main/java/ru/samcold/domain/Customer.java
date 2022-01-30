@@ -45,6 +45,11 @@ public class Customer {
         return phone;
     }
 
+    // ...
+    public String getCustomerFull() {
+        return name.get() + ", " + zip.get() + ", " + region.get() + ", " + city.get() + ", " + address.get();
+    }
+
     public void clear() {
         nameProperty().set("");
         zipProperty().set("");

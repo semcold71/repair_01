@@ -17,6 +17,8 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import padeg.lib.Padeg;
+import ru.samcold.Main;
 import ru.samcold.domain.*;
 import ru.samcold.repairing.Extraction;
 import ru.samcold.utils.NumberPropertyBinder;
@@ -24,6 +26,8 @@ import ru.samcold.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +47,7 @@ public class MainController {
     @FXML
     private Button btn_Save;
     @FXML
-    private Button btn_Conclusion;
+    private Button btn_createConclusion;
 
     @FXML
     private Button btn_Test;
@@ -133,6 +137,8 @@ public class MainController {
     //endregion
     //region Conclusion
     @FXML
+    private TitledPane pane_Conclusion;
+    @FXML
     private DatePicker dp_Con_SignDate;
     @FXML
     private TextField txt_Con_Tu;
@@ -146,6 +152,8 @@ public class MainController {
     private DatePicker dp_Con_OrderDate;
     @FXML
     private DatePicker dp_Con_NextDate;
+    @FXML
+    private TextField txt_Con_CustomerFull;
     @FXML
     private Button btn_Save_Conclusion;
     //endregion
@@ -170,7 +178,7 @@ public class MainController {
         rtk = new Rtk();
         customer = new Customer();
         crane = new Crane();
-        conclusion = new Conclusion(rtk);
+        conclusion = new Conclusion();
 
         isLoaded.set(false);
         validationSupport = new ValidationSupport();
@@ -361,27 +369,18 @@ public class MainController {
         dp_Con_ContractDate.valueProperty().bindBidirectional(conclusion.contractDateProperty());
         txt_Con_OrderNumber.textProperty().bindBidirectional(conclusion.orderNumberProperty());
         dp_Con_OrderDate.valueProperty().bindBidirectional(conclusion.orderDateProperty());
+        txt_Con_CustomerFull.textProperty().bindBidirectional(conclusion.customerFullProperty());
 
         // validation
         validationSupport1.registerValidator(txt_Con_Tu, emptyValidator);
-        validationSupport1.registerValidator(dp_Con_SignDate, emptyValidator);
-        validationSupport1.registerValidator(dp_Con_NextDate, emptyValidator);
-        validationSupport1.registerValidator(txt_Con_ContractNumber, emptyValidator);
-        validationSupport1.registerValidator(dp_Con_ContractDate, emptyValidator);
-        validationSupport1.registerValidator(txt_Con_OrderNumber, emptyValidator);
-        validationSupport1.registerValidator(dp_Con_OrderDate, emptyValidator);
+//        validationSupport1.registerValidator(dp_Con_SignDate, emptyValidator);
+//        validationSupport1.registerValidator(dp_Con_NextDate, emptyValidator);
+//        validationSupport1.registerValidator(txt_Con_ContractNumber, emptyValidator);
+//        validationSupport1.registerValidator(dp_Con_ContractDate, emptyValidator);
+//        validationSupport1.registerValidator(txt_Con_OrderNumber, emptyValidator);
+//        validationSupport1.registerValidator(dp_Con_OrderDate, emptyValidator);
 
         btn_Save_Conclusion.disableProperty().bind(validationSupport1.invalidProperty());
-    }
-
-    private void setValidation(List<Node> nodeList) {
-        for (Node node : nodeList) {
-            if (node instanceof TextField || node instanceof ComboBox) {
-                validationSupport.registerValidator((Control) node, Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR));
-            } else if (node instanceof Pane) {
-                setValidation(((Pane) node).getChildren());
-            }
-        }
     }
 
     private void initButtons() {
@@ -422,13 +421,87 @@ public class MainController {
 
         btn_Save.disableProperty().bind(validationSupport.invalidProperty());
 
+        btn_createConclusion.disableProperty().bind(validationSupport.invalidProperty());
 
+        btn_createConclusion.setOnAction(actionEvent -> {
+            try {
+                myDocument.setConclusionDocument(new XWPFDocument(Main.class.getResourceAsStream("/docx/blank1.docx")));
+                conclusion.customerFullProperty().set(customer.getCustomerFull());
+                pane_Conclusion.setDisable(false);
+                pane_Conclusion.setExpanded(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        btn_Save_Conclusion.setOnAction(actionEvent -> {
+            try {
+                createConclusionDocument();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // ...
         btn_Test.setOnAction(actionEvent -> {
             rtk.numberProperty().set("888");
         });
     }
 
+    private void createConclusionDocument() throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        List<XWPFParagraph> paragraphs = myDocument.getConclusionDocument().getParagraphs();
+
+        updateCurrentParagraph(myDocument.getConclusionDocument().getParagraphs().get(0), "tu", conclusion.tuProperty().get());
+        updateCurrentParagraph(myDocument.getConclusionDocument().getParagraphs().get(1), "customerFull", conclusion.customerFullProperty().get());
+        updateCurrentParagraph(myDocument.getConclusionDocument().getParagraphs().get(6), "date", formatter.format(conclusion.signingDateProperty().get()) + " г.");
+
+        updateParagraph(paragraphs, "craneFull", crane.getFullName());
+        updateParagraph(paragraphs, "craneFullRod",
+                stringUtils.firstToLower(stringUtils.strToRod(crane.getFullName())));
+        updateParagraph(paragraphs, "nextDate", formatter.format(conclusion.nextDateProperty().get()) + " г.");
+        updateParagraph(paragraphs, "orderNumber", conclusion.orderNumberProperty().get());
+
+        String contractParaText = "№ " + conclusion.contractNumberProperty().get() + " от " + formatter.format(conclusion.contractDateProperty().get()) + " г.";
+        String orderParaText = "№ " + conclusion.orderNumberProperty().get() + " от " + formatter.format(conclusion.orderDateProperty().get()) + " г.";
+        findInTables(myDocument.getConclusionDocument(), "contract", contractParaText);
+        findInTables(myDocument.getConclusionDocument(), "order", orderParaText);
+        findInTables(myDocument.getConclusionDocument(), "craneFullRod", stringUtils.firstToLower(stringUtils.strToRod(crane.getFullName())));
+        findInTables(myDocument.getConclusionDocument(), "orderDate", formatter.format(conclusion.orderDateProperty().get()));
+        //findInTables(myDocument.getConclusionDocument(), "craneName", crane.nameProperty().get());
+
+        XWPFTable table8 = myDocument.getConclusionDocument().getTables().get(8);
+        table8.getRows().get(0).getCell(1).getParagraphs().get(0).createRun().setText(crane.nameProperty().get());
+        table8.getRows().get(1).getCell(1).getParagraphs().get(0).createRun().setText(crane.markProperty().get());
+        table8.getRows().get(2).getCell(1).getParagraphs().get(0).createRun().setText(crane.modeProperty().get());
+        table8.getRows().get(3).getCell(1).getParagraphs().get(0).createRun().setText(crane.zavProperty().get());
+        table8.getRows().get(4).getCell(1).getParagraphs().get(0).createRun().setText(crane.regProperty().get());
+        table8.getRows().get(5).getCell(1).getParagraphs().get(0).createRun().setText(crane.factoryProperty().get());
+        table8.getRows().get(6).getCell(1).getParagraphs().get(0).createRun().setText(crane.issueProperty().get());
+        table8.getRows().get(7).getCell(1).getParagraphs().get(0).createRun().setText(crane.capacityProperty().get());
+        table8.getRows().get(8).getCell(1).getParagraphs().get(0).createRun().setText(crane.liftingProperty().get());
+        table8.getRows().get(9).getCell(1).getParagraphs().get(0).createRun().setText(crane.spanProperty().get());
+
+        XWPFTable table14 = myDocument.getConclusionDocument().getTables().get(14);
+        table14.getRows().get(1).getCell(0).getParagraphs().get(0).createRun().setText(crane.nameProperty().get(),0);
+        table14.getRows().get(1).getCell(1).getParagraphs().get(0).createRun().setText(crane.markProperty().get(),0);
+        table14.getRows().get(1).getCell(2).getParagraphs().get(0).createRun().setText(crane.zavProperty().get(),0);
+        table14.getRows().get(1).getCell(3).getParagraphs().get(0).createRun().setText(crane.regProperty().get(),0);
+
+        myDocument.saveConclusion();
+    }
+
     // ...
+    private void setValidation(List<Node> nodeList) {
+        for (Node node : nodeList) {
+            if (node instanceof TextField || node instanceof ComboBox) {
+                validationSupport.registerValidator((Control) node, Validator.createEmptyValidator("Необходимо заполнить", Severity.ERROR));
+            } else if (node instanceof Pane) {
+                setValidation(((Pane) node).getChildren());
+            }
+        }
+    }
+
     private void updateParagraph(List<XWPFParagraph> paragraphList, String target, String replacement) {
         for (XWPFParagraph paragraph : paragraphList) {
             for (XWPFRun run : paragraph.getRuns()) {

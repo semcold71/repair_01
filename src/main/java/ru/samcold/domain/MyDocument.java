@@ -3,6 +3,7 @@ package ru.samcold.domain;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ public class MyDocument {
 
     private XWPFDocument externalDocument;
     private XWPFDocument outputDocument;
+    private XWPFDocument conclusionDocument;
 
     public XWPFDocument getExternalDocument() {
         return externalDocument;
@@ -41,12 +43,30 @@ public class MyDocument {
 
     }
 
+    public XWPFDocument getConclusionDocument() {
+        return conclusionDocument;
+    }
+
+    public void setConclusionDocument(XWPFDocument conclusionDocument) {
+        this.conclusionDocument = conclusionDocument;
+    }
+
     public void save() throws IOException {
         try (FileOutputStream fos = new FileOutputStream("output.docx")) {
             outputDocument.write(fos);
             System.out.println("Save succeeded.");
         } catch (IOException e) {
             System.out.println("Save failed!");
+            e.printStackTrace();
+        }
+    }
+
+    public void saveConclusion() throws IOException {
+        try(FileOutputStream fos = new FileOutputStream("conclusion.docx")) {
+            conclusionDocument.write(fos);
+            System.out.println("Save conclusion succeeded.");
+        } catch (IOException e) {
+            System.out.println("Save conclusion failed!");
             e.printStackTrace();
         }
     }
